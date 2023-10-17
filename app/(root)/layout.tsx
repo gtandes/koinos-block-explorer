@@ -8,11 +8,12 @@ type layoutProps = {
 
 const layout: FC<layoutProps> = ({ children }) => {
   return (
-    <>
+    <main className="min-h-screen">
       <Navbar />
+      <div className="h-20" />
       {children}
       <Footer />
-    </>
+    </main>
   );
 };
 

@@ -311,3 +311,29 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+/* Scrollbar Track */
+::-webkit-scrollbar {
+  width: 4px; /* Set the width of the scrollbar */
+}
+
+/* Scrollbar Handle */
+::-webkit-scrollbar-thumb {
+  background: #666; /* Color of the scrollbar handle */
+  border-radius: 4px; /* Rounded corners for the handle */
+}
+
+/* On hover, make the scrollbar handle darker */
+::-webkit-scrollbar-thumb:hover {
+  background: #6ee7bf;
+}
+
+/* Scrollbar Track on the horizontal scrollbar (if needed) */
+::-webkit-scrollbar-track {
+  background: #1b1b1d; /* Color of the scrollbar track */
+}
+
+/* When scrolling, make the scrollbar handle a bit darker */
+::-webkit-scrollbar-thumb:active {
+  background: #19f6c1;
+}
