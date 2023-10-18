@@ -91,13 +91,8 @@ export const getManaPercent = async (acctId: string) => {
 
   const manaAvailable = await provider.getAccountRc(acctId);
   const manaPercent = Number(manaAvailable) / Number(koinInWallet) / 1000000;
-  console.log("====================================");
-  console.log(manaAvailable, manaPercent);
-  console.log("====================================");
+  // console.log("====================================");
+  // console.log(manaAvailable, manaPercent);
+  // console.log("====================================");
   return manaPercent;
-};
-
-export const getNetworkHeight = async () => {
-  // explore the promise that this returns; topology has the height of the entire network
-  // await provider.getHeadInfo();
 };

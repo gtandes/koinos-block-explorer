@@ -32,7 +32,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
   return (
     <section className="fixed top-0 left-0 right-0 w-full h-20 flex items-center justify-between py-4 px-8 box-border text-center text-base text-white font-inter bg-almost-black z-10 ">
       <Link href="/">
-        <div className="w-[392px] h-[18px] flex flex-col items-start justify-center mt-3">
+        <div className="flex flex-col items-start justify-center mt-3">
           <Image
             src={"/logo.svg"}
             alt="Odyssius Logo"

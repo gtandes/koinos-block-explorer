@@ -19,7 +19,7 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
         >
           <div className="rounded-lg [background:linear-gradient(180deg,_rgba(0,_0,_0,_0.5),_rgba(0,_0,_0,_0.5))] box-border w-[1038px] flex flex-col items-start justify-start py-3.5 px-[15px] border-[0.1px] border-solid border-o">
             <div className="self-stretch flex items-center justify-between">
-              <div className="flex flex-col items-center justify-start gap-[4px] font-font-awesome-6-pro">
+              <div className="flex flex-col items-center justify-start gap-[4px]">
                 <div className="w-[212.5px] flex items-start justify-start gap-[8px]">
                   <div className="relative leading-[24px]"></div>
                   <p className="relative leading-[24px] font-light font-inter text-gray text-right inline-block w-[138px] shrink-0">

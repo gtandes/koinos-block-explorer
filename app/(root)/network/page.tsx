@@ -1,7 +1,8 @@
-import { getBurned } from "@/lib/utilFns/useNetwork";
+import { getNetworkHeight } from "@/lib/utilFns/useNetwork";
 
 export default function page() {
-  const burnedAmount = getBurned();
+  // const burnedAmount = getBurned();
+  const networkHeight = getNetworkHeight();
 
   return (
     <section className="relative flex flex-col items-center justify-center bg-almost-black w-full h-[100vh] overflow-hidden">
@@ -20,7 +21,7 @@ export default function page() {
           </div>
 
           <div className="leading-[24px] text-left inline-block w-[100px] h-[89px]">
-            <p className="m-0">2,393</p>
+            <p className="m-0">{networkHeight}</p>
             <p className="m-0">54,393,000</p>
             <p className="m-0">100,000,000</p>
             <p className="m-0">23,093,021</p>
