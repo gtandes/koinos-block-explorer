@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button } from "@nextui-org/react";
 
 import { Input } from "../ui/input";
 import {
   getAccountHistory,
   getAcctTokenBalance,
+  getManaPercent,
 } from "@/lib/utilFns/useGetAcctHistory";
 import { transactionStore } from "@/store/TransactionStore";
+import Link from "next/link";
 
 export default function SearchComponent() {
   const {
@@ -18,14 +20,12 @@ export default function SearchComponent() {
     setVHPBalance,
     setWethBalance,
     setAccountTransactionHistory,
+    setManaPercentBalance,
   } = transactionStore();
 
-  // const [input, setInput] = useState("");
-  // const [error, setError] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState("");
-  // const [loading, setLoading] = useState(false);
+  const search = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
 
-  const search = async () => {
     const acctHistSearchRes = await getAccountHistory(searchInput, 11);
 
     const koinInWallet = await getAcctTokenBalance(
@@ -38,32 +38,41 @@ export default function SearchComponent() {
       searchInput
     );
 
-    // console.log(acctHistSearchRes);
+    const manaPerc = await getManaPercent(searchInput);
 
     setKoinBalance(koinInWallet);
     setVHPBalance(vhpInWallet);
     setAccountTransactionHistory(acctHistSearchRes);
+    setManaPercentBalance(manaPerc);
+
+    // setAddressSearch("");
   };
 
-  return (
-    <div className="w-full h-full flex items-center justify-center">
+  const DynamicWidthInput = () => {
+    const inputWidth = `${searchInput.length}ch`;
+
+    return (
       <Input
         type="text"
         value={searchInput}
         onChange={(e) => setAddressSearch(e.target.value)}
         placeholder="Ron.Koin"
-        className="w-[40%] text-almost-black mr-8"
+        className="rounded min-w-[15rem] w-[40%] overflow-hidden text-center py-8 px-12 border-b-[1px] border-solid border-gray leading-[24px] bg-almost-black text-o mb-8 text-2xl font-bold placeholder-center"
+        style={{ width: inputWidth }}
       />
+    );
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      <DynamicWidthInput />
 
       <Button
         onClick={search}
-        className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]"
+        className="rounded bg-o flex flex-col items-center justify-center px-8 py-7 text-center text-2xl text-almost-black font-inter leading-[24px] font-medium"
       >
-        Search
+        <Link href={"/search"}>Search</Link>
       </Button>
-
-      {/* {loading && <p>Loading...</p>}
-      {error && <p>Error: {errorMessage}</p>} */}
     </div>
   );
 }

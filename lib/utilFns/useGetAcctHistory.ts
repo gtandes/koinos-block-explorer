@@ -1,3 +1,4 @@
+import { transactionStore } from "@/store/TransactionStore";
 import { Contract, Provider, interfaces, utils } from "koilib";
 
 const provider = new Provider(["https://api.koinos.io"]);
@@ -37,8 +38,6 @@ export async function getAccountHistory(
   ascending = false,
   irreversible = false
 ): Promise<HistoryRecord[]> {
-  // const { selectedNetwork } = useNetworksStore();
-
   const { values } = await provider!.call<{
     values?: HistoryRecord[];
   }>("account_history.get_account_history", {
@@ -69,11 +68,36 @@ export const getAcctTokenBalance = async (
   const koin = koinContract.functions;
 
   // Get balance
-  const { result } = await koin.balanceOf({
+  const { result: balanceRes } = await koin.balanceOf({
     owner: acctId,
   });
 
-  console.log(result);
+  // Get decimals
+  const { result: decimalsRes } = await koin.decimals();
 
-  return result?.value;
+  const formattedBalance = utils.formatUnits(
+    balanceRes?.value,
+    decimalsRes?.value
+  );
+
+  return formattedBalance;
+};
+
+export const getManaPercent = async (acctId: string) => {
+  const koinInWallet = await getAcctTokenBalance(
+    "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
+    acctId
+  );
+
+  const manaAvailable = await provider.getAccountRc(acctId);
+  const manaPercent = Number(manaAvailable) / Number(koinInWallet) / 1000000;
+  console.log("====================================");
+  console.log(manaAvailable, manaPercent);
+  console.log("====================================");
+  return manaPercent;
+};
+
+export const getNetworkHeight = async () => {
+  // explore the promise that this returns; topology has the height of the entire network
+  // await provider.getHeadInfo();
 };

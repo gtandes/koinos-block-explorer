@@ -10,6 +10,7 @@ export const transactionStore = create(
       koinBalance: "",
       vhpBalance: "",
       wEthBalance: "",
+      manaPercentBalance: "",
     },
     (set, get) => ({
       // toggleSecondColumn: () =>
@@ -17,12 +18,14 @@ export const transactionStore = create(
       //     isFirstColClicked: !get().isFirstColClicked,
       //   })),
 
-      setAccountTransactionHistory: (prevHistory: any) =>
-        set({ accountTransactionHistory: prevHistory }),
+      setAccountTransactionHistory: (newHistory: any) =>
+        set({ accountTransactionHistory: newHistory }),
 
-      setKoinBalance: (prevBalance: any) => set({ koinBalance: prevBalance }),
-      setVHPBalance: (prevBalance: any) => set({ vhpBalance: prevBalance }),
-      setWethBalance: (prevBalance: any) => set({ wEthBalance: prevBalance }),
+      setKoinBalance: (newBalance: any) => set({ koinBalance: newBalance }),
+      setVHPBalance: (newBalance: any) => set({ vhpBalance: newBalance }),
+      setWethBalance: (newBalance: any) => set({ wEthBalance: newBalance }),
+      setManaPercentBalance: (newBalance: any) =>
+        set({ manaPercentBalance: newBalance }),
 
       setAddressSearch: (input: string) => set({ searchInput: input }),
     })
