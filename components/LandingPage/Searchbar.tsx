@@ -57,7 +57,7 @@ export default function SearchComponent() {
         value={searchInput}
         onChange={(e) => setAddressSearch(e.target.value)}
         placeholder="Ron.Koin"
-        className="rounded min-w-[15rem] w-[40%] overflow-hidden text-center py-8 px-12 border-b-[1px] border-solid border-gray leading-[24px] bg-almost-black text-o mb-8 text-2xl font-bold placeholder-center"
+        className="rounded min-w-[15rem] w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-almost-black text-o mb-8 text-2xl font-bold placeholder-center"
         style={{ width: inputWidth }}
       />
     );

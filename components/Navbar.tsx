@@ -66,7 +66,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
         </Link> */}
 
         <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">
-          Connect
+          <Link href="/dump">Dump</Link>
         </Button>
       </nav>
     </section>

@@ -90,7 +90,12 @@ export const getManaPercent = async (acctId: string) => {
   );
 
   const manaAvailable = await provider.getAccountRc(acctId);
-  const manaPercent = Number(manaAvailable) / Number(koinInWallet) / 1000000;
+  const manaPercent = (
+    Number(manaAvailable) /
+    Number(koinInWallet) /
+    1000000
+  ).toFixed(2);
+
   // console.log("====================================");
   // console.log(manaAvailable, manaPercent);
   // console.log("====================================");
