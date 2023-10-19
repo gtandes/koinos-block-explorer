@@ -1,13 +1,12 @@
 "use client";
 
-// import { moveDecimalLeftBy8FromEnd } from "@/lib/utilFns/useAddDecimals";
 import { transactionStore } from "@/store/TransactionStore";
 import { FC } from "react";
 
 type TokenCountCardProps = {};
 
 const TokenCountCard: FC<TokenCountCardProps> = ({}) => {
-  const { koinBalance, vhpBalance, wEthBalance } = transactionStore();
+  const { koinBalance, vhpBalance } = transactionStore();
 
   return (
     <div className="rounded-lg [background:linear-gradient(180deg,_rgba(0,_0,_0,_0.5),_rgba(0,_0,_0,_0.5))] box-border w-[684px] h-40 flex flex-col items-start justify-start p-4 gap-[16px] text-left text-base text-white font-inter border-[0.1px] border-solid border-o">

@@ -9,3 +9,7 @@ export function formatKoinosAddress(address: string): string {
 
   return `${prefix}...${suffix}`;
 }
+
+export function formatNumberWithCommas(string: string): string {
+  return string.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

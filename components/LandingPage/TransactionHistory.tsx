@@ -1,17 +1,19 @@
 "use client";
 
-import { formatKoinosAddress } from "@/lib/utilFns/useFormatAddress";
-import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
-import { transactionStore } from "@/store/TransactionStore";
 import { FC } from "react";
+import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
+import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
+import { deserialize } from "@/lib/utilFns/useDeserializer";
+import { transactionStore } from "@/store/TransactionStore";
 
 type TransactionHistoryProps = {};
 
 const TransactionHistory: FC<TransactionHistoryProps> = () => {
   const { accountTransactionHistory } = transactionStore();
+  const deserializedAmount = deserialize();
 
   return (
-    <div className="left-[193px] h-[485px] overflow-y-auto flex flex-col items-start justify-start p-2 box-border gap-[8px] text-left text-sm text-success-400 font-inter">
+    <div className="left-[193px] h-[400px] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">
       {accountTransactionHistory.map((transaction: HistoryRecord) => (
         <div
           key={transaction.trx?.transaction.id}
@@ -27,13 +29,13 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                   </p>
                 </div>
 
-                <div className="self-stretch flex items-start justify-start gap-[8px] text-2xs text-white font-inter leading-[24px] font-light">
+                <p className="self-stretch flex items-start justify-start gap-[8px] text-2xs text-white font-inter leading-[24px] font-light">
                   {`From: `}
                   {transaction.trx?.transaction.header?.payer &&
                     formatKoinosAddress(
                       transaction.trx.transaction.header.payer
                     )}
-                </div>
+                </p>
               </div>
 
               <div className="h-[26px] flex text-center text-3xs text-o rounded bg-almost-black items-center justify-center py-[3px] px-2 border-[1px] border-solid border-o leading-[10px] font-medium">
@@ -42,7 +44,7 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
 
               <div className="flex flex-col items-start justify-start text-right text-xl text-white">
                 <p className="relative leading-[24px] font-medium inline-block w-[126px]">
-                  99,999,999
+                  {deserializedAmount}
                 </p>
                 <p className="relative text-sm leading-[24px] font-light text-gray inline-block w-[126px]">
                   $99,999,999

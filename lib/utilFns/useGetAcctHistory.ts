@@ -1,5 +1,6 @@
 import { transactionStore } from "@/store/TransactionStore";
 import { Contract, Provider, interfaces, utils } from "koilib";
+import { formatNumberWithCommas } from "./useFormatInput";
 
 const provider = new Provider(["https://api.koinos.io"]);
 // const provider = new Provider(["https://harbinger-api.koinos.io"]);
@@ -80,7 +81,7 @@ export const getAcctTokenBalance = async (
     decimalsRes?.value
   );
 
-  return formattedBalance;
+  return formatNumberWithCommas(Number(formattedBalance).toFixed(2));
 };
 
 export const getManaPercent = async (acctId: string) => {
@@ -96,8 +97,5 @@ export const getManaPercent = async (acctId: string) => {
     1000000
   ).toFixed(2);
 
-  // console.log("====================================");
-  // console.log(manaAvailable, manaPercent);
-  // console.log("====================================");
   return manaPercent;
 };

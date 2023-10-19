@@ -26,7 +26,7 @@ export default function SearchComponent() {
   const search = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const acctHistSearchRes = await getAccountHistory(searchInput, 11);
+    const acctHistSearchRes = await getAccountHistory(searchInput, 21);
 
     const koinInWallet = await getAcctTokenBalance(
       "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
@@ -57,7 +57,7 @@ export default function SearchComponent() {
         value={searchInput}
         onChange={(e) => setAddressSearch(e.target.value)}
         placeholder="Ron.Koin"
-        className="rounded min-w-[15rem] w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-almost-black text-o mb-8 text-2xl font-bold placeholder-center"
+        className="rounded min-w-[15rem] w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-transparent text-o mb-8 text-2xl font-bold placeholder-center"
         style={{ width: inputWidth }}
       />
     );

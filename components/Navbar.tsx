@@ -30,7 +30,7 @@ type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = ({}) => {
   return (
-    <section className="fixed top-0 left-0 right-0 w-full h-20 flex items-center justify-between py-4 px-8 box-border text-center text-base text-white font-inter bg-almost-black z-10 ">
+    <section className="fixed top-0 left-0 right-0 w-full h-20 flex items-center justify-between py-4 px-8 box-border text-center text-base text-white font-inter z-10 backdrop-blur-sm">
       <Link href="/">
         <div className="flex flex-col items-start justify-center mt-3">
           <Image
