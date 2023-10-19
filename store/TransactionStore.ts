@@ -1,3 +1,4 @@
+import { deserialize } from "@/lib/utilFns/useDeserializer";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 
@@ -11,6 +12,7 @@ export const transactionStore = create(
       vhpBalance: "",
       wEthBalance: "",
       manaPercentBalance: "",
+      deserializedAmount: "",
     },
     (set, get) => ({
       // toggleSecondColumn: () =>
@@ -18,16 +20,19 @@ export const transactionStore = create(
       //     isFirstColClicked: !get().isFirstColClicked,
       //   })),
 
+      setAddressSearch: (input: string) => set({ searchInput: input }),
+
       setAccountTransactionHistory: (newHistory: any) =>
         set({ accountTransactionHistory: newHistory }),
 
       setKoinBalance: (newBalance: any) => set({ koinBalance: newBalance }),
       setVHPBalance: (newBalance: any) => set({ vhpBalance: newBalance }),
       setWethBalance: (newBalance: any) => set({ wEthBalance: newBalance }),
+      setDeserializedBalance: (newBalance: any) =>
+        set({ deserializedAmount: newBalance }),
+
       setManaPercentBalance: (newBalance: any) =>
         set({ manaPercentBalance: newBalance }),
-
-      setAddressSearch: (input: string) => set({ searchInput: input }),
     })
   )
 );

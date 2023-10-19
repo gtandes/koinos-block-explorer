@@ -3,14 +3,12 @@
 import { FC } from "react";
 import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
 import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
-import { deserialize } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 
 type TransactionHistoryProps = {};
 
 const TransactionHistory: FC<TransactionHistoryProps> = () => {
-  const { accountTransactionHistory } = transactionStore();
-  const deserializedAmount = deserialize();
+  const { accountTransactionHistory, deserializedAmount } = transactionStore();
 
   return (
     <div className="left-[193px] h-[400px] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">

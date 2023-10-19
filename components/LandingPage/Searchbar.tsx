@@ -9,6 +9,8 @@ import {
   getAcctTokenBalance,
   getManaPercent,
 } from "@/lib/utilFns/useGetAcctHistory";
+
+import { deserialize } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 import Link from "next/link";
 
@@ -18,15 +20,15 @@ export default function SearchComponent() {
     setAddressSearch,
     setKoinBalance,
     setVHPBalance,
-    setWethBalance,
     setAccountTransactionHistory,
     setManaPercentBalance,
+    setDeserializedBalance,
   } = transactionStore();
 
   const search = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const acctHistSearchRes = await getAccountHistory(searchInput, 21);
+    const acctHistSearchRes = await getAccountHistory(searchInput, 11);
 
     const koinInWallet = await getAcctTokenBalance(
       "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
@@ -39,13 +41,13 @@ export default function SearchComponent() {
     );
 
     const manaPerc = await getManaPercent(searchInput);
+    const deserializedAmount = await deserialize(searchInput);
 
     setKoinBalance(koinInWallet);
     setVHPBalance(vhpInWallet);
     setAccountTransactionHistory(acctHistSearchRes);
     setManaPercentBalance(manaPerc);
-
-    // setAddressSearch("");
+    setDeserializedBalance(deserializedAmount);
   };
 
   const DynamicWidthInput = () => {

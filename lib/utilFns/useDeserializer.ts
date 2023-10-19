@@ -2,17 +2,13 @@ import { Provider, Serializer, utils } from "koilib";
 
 import { getAccountHistory } from "./useGetAcctHistory";
 import { getTokenInformation } from "./useTokens";
-import { transactionStore } from "@/store/TransactionStore";
 
-export const deserialize = async () => {
-  const { searchInput } = transactionStore();
-
+export const deserialize = async (searchInput: string) => {
   // const accountAddress = "1PWdJ3VFB6kwu6wLdLPr9BwQZrNiPs7g8j";
   // const accountAddress = '1NsQbH5AhQXgtSNg1ejpFqTi2hmCWz1eQS'
   const accountAddress = searchInput;
-
   const provider = new Provider("https://api.koinos.io");
-  const historyRecs = await getAccountHistory(accountAddress, 50);
+  const historyRecs = await getAccountHistory(accountAddress, 11);
 
   const serializer = new Serializer(utils.tokenAbi.koilib_types!);
 
