@@ -1,7 +1,7 @@
-import AcctOwnerInfo from "@/components/LandingPage/AcctOwnerInfo";
-import TokenCountCard from "@/components/LandingPage/TokenCountCard";
-import TotalBalanceCard from "@/components/LandingPage/TotalBalanceCard";
-import TransactionHistory from "@/components/LandingPage/TransactionHistory";
+import AcctOwnerInfo from "@/components/SearchPage/AcctOwnerInfo";
+import TokenCountCard from "@/components/SearchPage/TokenCountCard";
+import TotalBalanceCard from "@/components/SearchPage/TotalBalanceCard";
+import TransactionHistory from "@/components/SearchPage/TransactionHistory";
 
 export default function page() {
   return (

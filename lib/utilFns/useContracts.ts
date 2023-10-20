@@ -30,7 +30,8 @@ export async function getContract(
         if (abi.methods[name]["entry-point"]) {
           //@ts-ignore this is needed to be compatible with "old" abis
           abi.methods[name].entry_point = parseInt(
-            String(abi.methods[name]["entry_point"])
+            //@ts-ignore this is needed to be compatible with "old" abis
+            String(abi.methods[name]["entry-point"])
           );
         }
 

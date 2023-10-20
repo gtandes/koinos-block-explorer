@@ -1,23 +1,23 @@
 import { Provider, Serializer, utils } from "koilib";
-
-import { getAccountHistory } from "./useGetAcctHistory";
+import { HistoryRecord } from "./useGetAcctHistory";
 import { getTokenInformation } from "./useTokens";
 
-export const deserialize = async (searchInput: string) => {
-  // const accountAddress = "1PWdJ3VFB6kwu6wLdLPr9BwQZrNiPs7g8j";
-  // const accountAddress = '1NsQbH5AhQXgtSNg1ejpFqTi2hmCWz1eQS'
-  const accountAddress = searchInput;
-  const provider = new Provider("https://api.koinos.io");
-  const historyRecs = await getAccountHistory(accountAddress, 11);
+const provider = new Provider(["https://api.koinos.io"]);
+// const provider = new Provider(["https://harbinger-api.koinos.io"]);
 
+export const deserializeEvents = async (
+  account: string,
+  historyRecords: HistoryRecord[]
+): Promise<HistoryRecord[]> => {
   const serializer = new Serializer(utils.tokenAbi.koilib_types!);
 
   // iterate over history records
-  for (let index = 0; index < historyRecs.length; index++) {
-    const historyRec = historyRecs[index];
+  for (let index = 0; index < historyRecords.length; index++) {
+    const historyRec = historyRecords[index];
 
     // if the history record is about a transaction
     if (historyRec.trx && historyRec.trx.receipt.events) {
+      historyRec.trx.receipt.token_events = [];
       // iterate over the events available in the receipt
       for (
         let index = 0;
@@ -47,14 +47,16 @@ export const deserialize = async (searchInput: string) => {
               );
 
               // check if it's token we sent
-              if (transferData.from === accountAddress) {
-                console.log(`-${amount} ${tokenInfo.symbol} (sent)`);
-                return `-${amount} ${tokenInfo.symbol} (sent)`;
+              if (transferData.from === account) {
+                historyRec.trx.receipt.token_events.push(
+                  `-${amount} ${tokenInfo.symbol} (sent)`
+                );
               }
               // otherwise, it's tokens we received
               else {
-                console.log(`+${amount} ${tokenInfo.symbol} (gained)`);
-                return `+${amount} ${tokenInfo.symbol} (gained)`;
+                historyRec.trx.receipt.token_events.push(
+                  `+${amount} ${tokenInfo.symbol} (received)`
+                );
               }
             }
           } catch (error) {
@@ -81,8 +83,9 @@ export const deserialize = async (searchInput: string) => {
                 tokenInfo.decimals
               );
 
-              console.log(`+${amount} ${tokenInfo.symbol} (minted)`);
-              return `+${amount} ${tokenInfo.symbol} (minted)`;
+              historyRec.trx.receipt.token_events.push(
+                `+${amount} ${tokenInfo.symbol} (minted)`
+              );
             }
           } catch (error) {
             // ignore deserialization errors
@@ -107,8 +110,9 @@ export const deserialize = async (searchInput: string) => {
                 tokenInfo.decimals
               );
 
-              console.log(`-${amount} ${tokenInfo.symbol} (burned)`);
-              return `-${amount} ${tokenInfo.symbol} (burned)`;
+              historyRec.trx.receipt.token_events.push(
+                `-${amount} ${tokenInfo.symbol} (burned)`
+              );
             }
           } catch (error) {
             // ignore deserialization errors
@@ -117,6 +121,7 @@ export const deserialize = async (searchInput: string) => {
       }
     } // if the history record is about a block
     else if (historyRec.block && historyRec.block.receipt.events) {
+      historyRec.block.receipt.token_events = [];
       // iterate over the events available in the receipt
       for (
         let index = 0;
@@ -146,14 +151,16 @@ export const deserialize = async (searchInput: string) => {
               );
 
               // check if it's token we sent
-              if (transferData.from === accountAddress) {
-                console.log(`-${amount} ${tokenInfo.symbol} (sent)`);
-                return `-${amount} ${tokenInfo.symbol} (sent)`;
+              if (transferData.from === account) {
+                historyRec.block.receipt.token_events.push(
+                  `-${amount} ${tokenInfo.symbol} (sent)`
+                );
               }
               // otherwise, it's tokens we received
               else {
-                console.log(`+${amount} ${tokenInfo.symbol} (gained)`);
-                return `+${amount} ${tokenInfo.symbol} (gained)`;
+                historyRec.block.receipt.token_events.push(
+                  `+${amount} ${tokenInfo.symbol} (received)`
+                );
               }
             }
           } catch (error) {
@@ -179,8 +186,9 @@ export const deserialize = async (searchInput: string) => {
                 tokenInfo.decimals
               );
 
-              console.log(`+${amount} ${tokenInfo.symbol} (minted)`);
-              return `+${amount} ${tokenInfo.symbol} (minted)`;
+              historyRec.block.receipt.token_events.push(
+                `+${amount} ${tokenInfo.symbol} (minted)`
+              );
             }
           } catch (error) {
             // ignore deserialization errors
@@ -205,8 +213,9 @@ export const deserialize = async (searchInput: string) => {
                 tokenInfo.decimals
               );
 
-              console.log(`-${amount} ${tokenInfo.symbol} (burnt)`);
-              return `-${amount} ${tokenInfo.symbol} (burnt)`;
+              historyRec.block.receipt.token_events.push(
+                `-${amount} ${tokenInfo.symbol} (burned)`
+              );
             }
           } catch (error) {
             // ignore deserialization errors
@@ -215,4 +224,6 @@ export const deserialize = async (searchInput: string) => {
       }
     }
   }
+
+  return historyRecords;
 };

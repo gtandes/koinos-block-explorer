@@ -1,10 +1,21 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { SearchIcon } from "lucide-react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Kbd,
+  useDisclosure,
+} from "@nextui-org/react";
+import SearchComponent from "./SearchPage/Searchbar";
 
 type ActiveLinkProps = {
   href: string;
@@ -29,6 +40,24 @@ const ActiveLink = ({ href, children }: ActiveLinkProps) => {
 type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = ({}) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const pathname = usePathname();
+  const homeRoute = pathname === "/";
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "q" && (event.ctrlKey || event.metaKey)) {
+        onOpen();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onOpen]);
+
   return (
     <section className="fixed top-0 left-0 right-0 w-full h-20 flex items-center justify-between py-4 px-8 box-border text-center text-base text-white font-inter z-10 backdrop-blur-sm">
       <Link href="/">
@@ -48,22 +77,35 @@ const Navbar: FC<NavbarProps> = ({}) => {
       </Link>
 
       <nav className="items-center justify-end gap-[32px] hidden sm:flex">
-        <ActiveLink href="/search">Search</ActiveLink>
+        {!homeRoute && (
+          <div className="flex items-center justify-center">
+            <Button
+              onClick={onOpen}
+              variant="bordered"
+              className="flex items-center px-2 justify-between border-o"
+              startContent={
+                <SearchIcon className="text-white/90  pointer-events-none flex-shrink-0 w-5 h-5" />
+              }
+              endContent={<Kbd keys={["ctrl"]}>Q</Kbd>}
+            >
+              <p className="text-white">Quick Search</p>
+            </Button>
+
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+              <ModalContent className="flex items-center justify-center h-[30%] bg-almost-black border-1 border-o overflow-hidden">
+                {() => (
+                  <>
+                    <ModalHeader />
+                    <ModalBody></ModalBody>
+                    <SearchComponent />
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+          </div>
+        )}
+
         <ActiveLink href="/network">Network</ActiveLink>
-
-        {/* <Link
-          href="/"
-          className="relative leading-[24px] text-o-yellow cursor-pointer font-bold"
-        >
-          Search
-        </Link>
-
-        <Link
-          href={href}
-          className="relative [text-decoration:underline] leading-[24px]"
-        >
-          Network
-        </Link> */}
 
         <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">
           <Link href="/dump">Dump</Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import Link from "next/link";
 import { Button } from "@nextui-org/react";
 
 import { Input } from "../ui/input";
@@ -10,9 +10,9 @@ import {
   getManaPercent,
 } from "@/lib/utilFns/useGetAcctHistory";
 
-import { deserialize } from "@/lib/utilFns/useDeserializer";
+import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
-import Link from "next/link";
+import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
 
 export default function SearchComponent() {
   const {
@@ -22,13 +22,15 @@ export default function SearchComponent() {
     setVHPBalance,
     setAccountTransactionHistory,
     setManaPercentBalance,
-    setDeserializedBalance,
   } = transactionStore();
 
   const search = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const acctHistSearchRes = await getAccountHistory(searchInput, 11);
+    let acctHistSearchRes = await getAccountHistory(searchInput, 21);
+    acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
+    acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
+    // console.log(acctHistSearchRes);
 
     const koinInWallet = await getAcctTokenBalance(
       "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
@@ -41,13 +43,11 @@ export default function SearchComponent() {
     );
 
     const manaPerc = await getManaPercent(searchInput);
-    const deserializedAmount = await deserialize(searchInput);
 
     setKoinBalance(koinInWallet);
     setVHPBalance(vhpInWallet);
     setAccountTransactionHistory(acctHistSearchRes);
     setManaPercentBalance(manaPerc);
-    setDeserializedBalance(deserializedAmount);
   };
 
   const DynamicWidthInput = () => {
@@ -59,14 +59,14 @@ export default function SearchComponent() {
         value={searchInput}
         onChange={(e) => setAddressSearch(e.target.value)}
         placeholder="Ron.Koin"
-        className="rounded min-w-[15rem] w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-transparent text-o mb-8 text-2xl font-bold placeholder-center"
+        className="rounded min-w-[15rem] w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-transparent text-o mb-8 text-2xl font-bold placeholder-center "
         style={{ width: inputWidth }}
       />
     );
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
+    <div className="w-full h-full flex flex-col items-center justify-center -mt-40">
       <DynamicWidthInput />
 
       <Button

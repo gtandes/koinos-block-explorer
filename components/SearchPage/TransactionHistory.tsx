@@ -4,11 +4,13 @@ import { FC } from "react";
 import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
 import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
 import { transactionStore } from "@/store/TransactionStore";
+import { DownloadIcon, UploadIcon } from "lucide-react";
 
 type TransactionHistoryProps = {};
 
 const TransactionHistory: FC<TransactionHistoryProps> = () => {
-  const { accountTransactionHistory, deserializedAmount } = transactionStore();
+  const { accountTransactionHistory } = transactionStore();
+  console.log(accountTransactionHistory);
 
   return (
     <div className="left-[193px] h-[400px] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">
@@ -21,9 +23,19 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
             <div className="self-stretch flex items-center justify-between">
               <div className="flex flex-col items-center justify-start gap-[4px]">
                 <div className="w-[212.5px] flex items-start justify-start gap-[8px]">
-                  <div className="relative leading-[24px]"></div>
-                  <p className="relative leading-[24px] font-light font-inter text-gray text-right inline-block w-[138px] shrink-0">
-                    01/01/2023 2:34pm
+                  <div className="relative leading-[24px]">
+                    {transaction.trx?.receipt.token_events.map((event, index) =>
+                      event.includes("+") ? (
+                        <DownloadIcon key={index} />
+                      ) : (
+                        <UploadIcon key={index} className="text-red-400" />
+                      )
+                    )}
+                  </div>
+                  <p className="relative leading-[24px] font-light font-inter text-gray text-right inline-block w-[160px] shrink-0">
+                    {new Date(
+                      parseInt(transaction.trx!.receipt.timestamp)
+                    ).toLocaleString()}
                   </p>
                 </div>
 
@@ -40,11 +52,11 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                 Tx {transaction.trx?.transaction.id}
               </div>
 
-              <div className="flex flex-col items-start justify-start text-right text-xl text-white">
-                <p className="relative leading-[24px] font-medium inline-block w-[126px]">
-                  {deserializedAmount}
+              <div className="flex flex-col items-start justify-start text-right text-xl text-white w-[220px]">
+                <p className="relative leading-[24px] font-medium inline-block w-full">
+                  {transaction.trx?.receipt.token_events}
                 </p>
-                <p className="relative text-sm leading-[24px] font-light text-gray inline-block w-[126px]">
+                <p className="relative text-sm leading-[24px] font-light text-gray inline-block w-full">
                   $99,999,999
                 </p>
               </div>

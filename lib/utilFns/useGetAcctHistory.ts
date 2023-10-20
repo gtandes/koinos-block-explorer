@@ -1,4 +1,3 @@
-import { transactionStore } from "@/store/TransactionStore";
 import { Contract, Provider, interfaces, utils } from "koilib";
 import { formatNumberWithCommas } from "./useFormatInput";
 
@@ -13,6 +12,7 @@ export type BlockReceiptJson = {
   compute_bandwidth_used?: string;
   state_merkle_root?: string;
   events?: interfaces.EventData[];
+  token_events: string[];
   transaction_receipts?: interfaces.TransactionReceipt[];
   logs?: string[];
   disk_storage_charged?: string;
@@ -20,11 +20,27 @@ export type BlockReceiptJson = {
   compute_bandwidth_charged?: string;
 };
 
+export type TransactionReceiptJson = {
+  timestamp: string;
+  id: string;
+  payer: string;
+  max_payer_rc: string;
+  rc_limit: string;
+  rc_used: string;
+  disk_storage_used: string;
+  network_bandwidth_used: string;
+  compute_bandwidth_used: string;
+  reverted: boolean;
+  events: interfaces.EventData[];
+  token_events: string[];
+  logs: string[];
+};
+
 export type HistoryRecord = {
   seq_num?: string;
   trx?: {
     transaction: interfaces.TransactionJson;
-    receipt: interfaces.TransactionReceipt;
+    receipt: TransactionReceiptJson;
   };
   block?: {
     header: interfaces.BlockHeaderJson;
