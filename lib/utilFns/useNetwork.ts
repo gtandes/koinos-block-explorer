@@ -30,6 +30,8 @@ export const getNetworkHeight = async () => {
   return formatNumberWithCommas(head_topology.height);
 };
 
+export const getMarketcap = async () => {};
+
 // function getClaimContract(provider: Provider) {
 //   return new Contract({
 //     id: "18zw3ZokdfHtudzaWAUnU4tUvKzKiJeN76",

@@ -40,7 +40,7 @@ const ActiveLink = ({ href, children }: ActiveLinkProps) => {
 type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = ({}) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const pathname = usePathname();
   const homeRoute = pathname === "/";
 
@@ -91,13 +91,18 @@ const Navbar: FC<NavbarProps> = ({}) => {
               <p className="text-white">Quick Search</p>
             </Button>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+            <Modal
+              backdrop="blur"
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              size="2xl"
+            >
               <ModalContent className="flex items-center justify-center h-[30%] bg-almost-black border-1 border-o overflow-hidden">
                 {() => (
                   <>
                     <ModalHeader />
                     <ModalBody></ModalBody>
-                    <SearchComponent />
+                    <SearchComponent onClose={onClose} />
                   </>
                 )}
               </ModalContent>
@@ -105,6 +110,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
           </div>
         )}
 
+        {/* {!homeRoute && <ActiveLink href="/search">Search</ActiveLink>} */}
         <ActiveLink href="/network">Network</ActiveLink>
 
         <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">

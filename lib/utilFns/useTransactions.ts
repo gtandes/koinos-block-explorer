@@ -52,16 +52,36 @@ export const getTransactionTimestamp = async (
   }>("block_store.get_blocks_by_id", {
     return_block: true,
     return_receipt: false,
-    block_ids: [transaction.containing_blocks[0]],
+
+    // block_ids: [transaction.containing_blocks[0]],
+
+    // bugfix approach#2
+    block_ids: transaction.containing_blocks,
   });
 
-  if (blocks.block_items.length) {
-    cache.set(transactionId, {
-      timestamp: blocks.block_items[0].block?.header!.timestamp!,
-      expiration: new Date().getTime() + 3600000,
-    });
+  // bugfix approach#1
 
-    return blocks.block_items[0].block.header!.timestamp!;
+  // if (blocks.block_items.length) {
+  //   cache.set(transactionId, {
+  //     timestamp: blocks.block_items[0].block.header!.timestamp!,
+  //     expiration: new Date().getTime() + 3600000,
+  //   });
+
+  //   return blocks.block_items[0].block.header!.timestamp!;
+  // }
+
+  // bugfix approach#2
+  if (blocks.block_items.length) {
+    for (const blockItem of blocks.block_items) {
+      if (blockItem.block !== undefined) {
+        cache.set(transactionId, {
+          timestamp: blockItem.block.header!.timestamp!,
+          expiration: new Date().getTime() + 3600000,
+        });
+
+        return blockItem.block.header!.timestamp!;
+      }
+    }
   }
 
   return "";

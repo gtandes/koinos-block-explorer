@@ -167,6 +167,7 @@ export const deserializeEvents = async (
             // ignore deserialization errors
           }
         }
+
         // if it's a mint event
         else if (event.name.endsWith("mint_event")) {
           try {
@@ -194,6 +195,7 @@ export const deserializeEvents = async (
             // ignore deserialization errors
           }
         }
+
         // if it's a burn event
         else if (event.name.endsWith("burn_event")) {
           try {

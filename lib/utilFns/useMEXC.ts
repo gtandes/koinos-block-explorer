@@ -1,14 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-export function fetchMarketData() {
-  return fetch(
+const fetchMEXCData = async () => {
+  const response = await axios.get(
     "https://www.mexc.com/open/api/v2/market/ticker?symbol=koin_usdt"
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => data.last);
-}
+  );
+
+  // console.log(response);
+
+  return response.data;
+};
+
+const data = await fetchMEXCData();
+export const mexcKoinLastPrice = parseFloat(data.data[0].last);

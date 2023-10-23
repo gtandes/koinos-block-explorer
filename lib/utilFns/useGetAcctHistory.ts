@@ -74,7 +74,7 @@ export async function getAccountHistory(
 
 export const getAcctTokenBalance = async (
   contractId: string,
-  acctId: string
+  acctId?: string
 ) => {
   const koinContract = new Contract({
     id: contractId,
@@ -107,6 +107,7 @@ export const getManaPercent = async (acctId: string) => {
   );
 
   const manaAvailable = await provider.getAccountRc(acctId);
+
   const manaPercent = (
     Number(manaAvailable) /
     Number(koinInWallet) /

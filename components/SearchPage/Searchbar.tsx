@@ -1,7 +1,9 @@
 "use client";
 
+import { FC } from "react";
 import Link from "next/link";
 import { Button } from "@nextui-org/react";
+import { usePathname } from "next/navigation";
 
 import { Input } from "../ui/input";
 import {
@@ -14,7 +16,13 @@ import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
 
-export default function SearchComponent() {
+type SearchComponentProps = { onClose: () => void };
+
+const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
+  const pathname = usePathname();
+  const homeRoute = pathname === "/";
+  const searchRoute = pathname === "/search";
+
   const {
     searchInput,
     setAddressSearch,
@@ -24,8 +32,8 @@ export default function SearchComponent() {
     setManaPercentBalance,
   } = transactionStore();
 
-  const search = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const search = async () => {
+    // e.preventDefault();
 
     let acctHistSearchRes = await getAccountHistory(searchInput, 21);
     acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
@@ -70,11 +78,16 @@ export default function SearchComponent() {
       <DynamicWidthInput />
 
       <Button
-        onClick={search}
+        onClick={() => {
+          search();
+          !homeRoute && onClose();
+        }}
         className="rounded bg-o flex flex-col items-center justify-center px-8 py-7 text-center text-2xl text-almost-black font-inter leading-[24px] font-medium"
       >
-        <Link href={"/search"}>Search</Link>
+        {searchRoute ? "Search" : <Link href={"/search"}>Search</Link>}
       </Button>
     </div>
   );
-}
+};
+
+export default SearchComponent;
