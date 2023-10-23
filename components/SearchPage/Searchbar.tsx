@@ -16,7 +16,7 @@ import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
 
-type SearchComponentProps = { onClose: () => void };
+type SearchComponentProps = { onClose?: () => void };
 
 const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
   const pathname = usePathname();
@@ -80,7 +80,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
       <Button
         onClick={() => {
           search();
-          !homeRoute && onClose();
+          !homeRoute && onClose?.();
         }}
         className="rounded bg-o flex flex-col items-center justify-center px-8 py-7 text-center text-2xl text-almost-black font-inter leading-[24px] font-medium"
       >
