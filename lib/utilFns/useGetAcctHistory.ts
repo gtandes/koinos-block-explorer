@@ -2,7 +2,6 @@ import { Contract, Provider, interfaces, utils } from "koilib";
 import { formatNumberWithCommas } from "./useFormatInput";
 
 const provider = new Provider(["https://api.koinos.io"]);
-// const provider = new Provider(["https://harbinger-api.koinos.io"]);
 
 export type BlockReceiptJson = {
   id?: string;
@@ -18,6 +17,7 @@ export type BlockReceiptJson = {
   disk_storage_charged?: string;
   network_bandwidth_charged?: string;
   compute_bandwidth_charged?: string;
+  amount?: string;
 };
 
 export type TransactionReceiptJson = {
@@ -34,6 +34,7 @@ export type TransactionReceiptJson = {
   events: interfaces.EventData[];
   token_events: string[];
   logs: string[];
+  amount?: string;
 };
 
 export type HistoryRecord = {

@@ -45,18 +45,20 @@ const Navbar: FC<NavbarProps> = ({}) => {
   const homeRoute = pathname === "/";
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "q" && (event.ctrlKey || event.metaKey)) {
-        onOpen();
-      }
-    };
+    if (!homeRoute) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "q" && (event.ctrlKey || event.metaKey)) {
+          onOpen();
+        }
+      };
 
-    window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onOpen]);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [homeRoute, onOpen]);
 
   return (
     <section className="fixed top-0 left-0 right-0 w-full h-20 flex items-center justify-between py-4 px-8 box-border text-center text-base text-white font-inter z-10 backdrop-blur-sm">

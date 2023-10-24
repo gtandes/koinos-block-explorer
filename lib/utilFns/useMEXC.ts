@@ -5,8 +5,7 @@ const fetchMEXCData = async () => {
     "https://www.mexc.com/open/api/v2/market/ticker?symbol=koin_usdt"
   );
 
-  // console.log(response);
-
+  // consider response.json()
   return response.data;
 };
 

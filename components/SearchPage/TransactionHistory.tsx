@@ -6,6 +6,7 @@ import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
 import { transactionStore } from "@/store/TransactionStore";
 import { DownloadIcon, UploadIcon } from "lucide-react";
 import { ScrollShadow } from "@nextui-org/react";
+import { mexcKoinLastPrice } from "@/lib/utilFns/useMEXC";
 
 type TransactionHistoryProps = {};
 
@@ -14,8 +15,8 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
   console.log(accountTransactionHistory);
 
   return (
-    <div className="left-[193px] h-[400px] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">
-      <ScrollShadow hideScrollBar className="w-full h-full">
+    <div className="left-[193px] h-[50%] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">
+      <ScrollShadow className="w-full h-full">
         {accountTransactionHistory.map((transaction: HistoryRecord, index) => {
           const dataExistence = transaction.block || transaction.trx;
 
@@ -99,7 +100,10 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                         : transaction.trx?.receipt.token_events}
                     </p>
                     <p className="relative text-sm leading-[24px] font-light text-gray inline-block w-full">
-                      $99,999,999
+                      {transaction.trx
+                        ? Number(transaction.trx.receipt.amount) *
+                          mexcKoinLastPrice
+                        : transaction.block?.receipt.amount}
                     </p>
                   </div>
                 </div>

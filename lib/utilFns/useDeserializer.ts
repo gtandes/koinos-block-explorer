@@ -1,9 +1,11 @@
+import { lazy } from "react";
 import { Provider, Serializer, utils } from "koilib";
 import { HistoryRecord } from "./useGetAcctHistory";
 import { getTokenInformation } from "./useTokens";
+// import { fetchMEXCData } from "./useMEXC";
 
 const provider = new Provider(["https://api.koinos.io"]);
-// const provider = new Provider(["https://harbinger-api.koinos.io"]);
+const mexcLazy = lazy(() => import("./useMEXC"));
 
 export const deserializeEvents = async (
   account: string,
@@ -46,16 +48,22 @@ export const deserializeEvents = async (
                 tokenInfo.decimals
               );
 
+              historyRec.trx.receipt.amount = String(
+                Number(amount) * mexcKoinLastPrice
+              );
+
+              console.log(historyRec.trx.receipt.amount);
+
               // check if it's token we sent
               if (transferData.from === account) {
                 historyRec.trx.receipt.token_events.push(
-                  `-${amount} ${tokenInfo.symbol} (sent)`
+                  `-${amount} ${tokenInfo.symbol}`
                 );
               }
               // otherwise, it's tokens we received
               else {
                 historyRec.trx.receipt.token_events.push(
-                  `+${amount} ${tokenInfo.symbol} (received)`
+                  `+${amount} ${tokenInfo.symbol}`
                 );
               }
             }
@@ -81,6 +89,10 @@ export const deserializeEvents = async (
               const amount = utils.formatUnits(
                 transferData.value,
                 tokenInfo.decimals
+              );
+
+              historyRec.trx.receipt.amount = String(
+                Number(amount) * mexcKoinLastPrice
               );
 
               historyRec.trx.receipt.token_events.push(
@@ -110,6 +122,10 @@ export const deserializeEvents = async (
                 tokenInfo.decimals
               );
 
+              historyRec.trx.receipt.amount = String(
+                Number(amount) * mexcKoinLastPrice
+              );
+
               historyRec.trx.receipt.token_events.push(
                 `-${amount} ${tokenInfo.symbol} (burned)`
               );
@@ -119,7 +135,9 @@ export const deserializeEvents = async (
           }
         }
       }
-    } // if the history record is about a block
+    }
+
+    // if the history record is about a block
     else if (historyRec.block && historyRec.block.receipt.events) {
       historyRec.block.receipt.token_events = [];
       // iterate over the events available in the receipt
@@ -150,16 +168,18 @@ export const deserializeEvents = async (
                 tokenInfo.decimals
               );
 
+              historyRec.block.receipt.amount = amount;
+
               // check if it's token we sent
               if (transferData.from === account) {
                 historyRec.block.receipt.token_events.push(
-                  `-${amount} ${tokenInfo.symbol} (sent)`
+                  `-${amount} ${tokenInfo.symbol}`
                 );
               }
               // otherwise, it's tokens we received
               else {
                 historyRec.block.receipt.token_events.push(
-                  `+${amount} ${tokenInfo.symbol} (received)`
+                  `+${amount} ${tokenInfo.symbol}`
                 );
               }
             }
@@ -186,6 +206,8 @@ export const deserializeEvents = async (
                 transferData.value,
                 tokenInfo.decimals
               );
+
+              historyRec.block.receipt.amount = amount;
 
               historyRec.block.receipt.token_events.push(
                 `+${amount} ${tokenInfo.symbol} (minted)`
@@ -214,6 +236,8 @@ export const deserializeEvents = async (
                 transferData.value,
                 tokenInfo.decimals
               );
+
+              historyRec.block.receipt.amount = amount;
 
               historyRec.block.receipt.token_events.push(
                 `-${amount} ${tokenInfo.symbol} (burned)`
