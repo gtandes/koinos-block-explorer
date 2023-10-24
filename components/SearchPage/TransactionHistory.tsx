@@ -2,20 +2,58 @@
 
 import { FC } from "react";
 import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
-import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
+import {
+  HistoryRecord,
+  getAccountHistory,
+  getAcctTokenBalance,
+  getManaPercent,
+} from "@/lib/utilFns/useGetAcctHistory";
 import { transactionStore } from "@/store/TransactionStore";
 import { DownloadIcon, UploadIcon } from "lucide-react";
-import { ScrollShadow } from "@nextui-org/react";
+import { Button, ScrollShadow } from "@nextui-org/react";
+import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
+import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
 
 type TransactionHistoryProps = {};
 
 const TransactionHistory: FC<TransactionHistoryProps> = () => {
-  const { accountTransactionHistory, searchInput } = transactionStore();
-  console.log(accountTransactionHistory);
+  const {
+    accountTransactionHistory,
+    searchInput,
+    setAddressSearch,
+    setKoinBalance,
+    setVHPBalance,
+    setAccountTransactionHistory,
+    setManaPercentBalance,
+  } = transactionStore();
+
+  const search = async () => {
+    let acctHistSearchRes = await getAccountHistory(searchInput, 21);
+    acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
+    acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
+    // console.log(acctHistSearchRes);
+
+    const koinInWallet = await getAcctTokenBalance(
+      "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
+      searchInput
+    );
+
+    const vhpInWallet = await getAcctTokenBalance(
+      "18tWNU7E4yuQzz7hMVpceb9ixmaWLVyQsr",
+      searchInput
+    );
+
+    const manaPerc = await getManaPercent(searchInput);
+
+    setKoinBalance(koinInWallet);
+    setVHPBalance(vhpInWallet);
+    setAccountTransactionHistory(acctHistSearchRes);
+    setManaPercentBalance(manaPerc);
+  };
 
   return (
     <div className="left-[193px] h-[400px] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">
-      <ScrollShadow hideScrollBar className="w-full h-full">
+      <ScrollShadow className="w-full h-full">
         {accountTransactionHistory.map((transaction: HistoryRecord, index) => {
           const dataExistence = transaction.block || transaction.trx;
 
@@ -26,12 +64,12 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                   ? transaction.block?.receipt.id || transaction.trx?.receipt.id
                   : index
               }
-              className="flex items-start justify-start text-left text-sm text-success-400 font-inter"
+              className={`flex items-start justify-start text-left text-sm text-success-400 font-inter my-1 first:mt-1 last:mb-1`}
             >
-              <div className="rounded-lg [background:linear-gradient(180deg,_rgba(0,_0,_0,_0.5),_rgba(0,_0,_0,_0.5))] box-border w-[1038px] flex flex-col items-start justify-start py-3.5 px-[15px] border-[0.1px] border-solid border-o">
+              <div className="rounded-lg [background:linear-gradient(180deg,_rgba(0,_0,_0,_0.5),_rgba(0,_0,_0,_0.5))] box-border w-[1038px] flex flex-col items-start justify-start py-3.5 px-[15px] border-[0.1px] border-solid border-transparent">
                 <div className="self-stretch flex items-center justify-between">
                   <div className="flex flex-col items-center justify-start gap-[4px]">
-                    <div className="w-[212.5px] flex items-start justify-start gap-[8px]">
+                    <div className="w-[220px] flex items-start justify-start gap-[8px]">
                       <div className="relative leading-[24px]">
                         {transaction.block
                           ? transaction.block.receipt.token_events.map(
@@ -58,12 +96,7 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                             )}
                       </div>
 
-                      <p className="relative leading-[24px] font-light font-inter text-gray text-right inline-block w-[160px] shrink-0">
-                        {/* {transaction.trx &&
-                        new Date(
-                          parseInt(transaction.trx!.receipt.timestamp)
-                        ).toLocaleString()} */}
-
+                      <p className="relative leading-[24px] font-light font-inter text-gray text-right inline-block w-[170px] shrink-0">
                         {transaction.block
                           ? new Date(
                               parseInt(transaction.block.header?.timestamp!)
@@ -74,7 +107,16 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                       </p>
                     </div>
 
-                    <p className="self-stretch flex items-start justify-start gap-[8px] text-2xs text-white font-inter leading-[24px] font-light">
+                    <Button
+                      onPress={() => {
+                        setAddressSearch(
+                          `${transaction.trx?.transaction.header?.payer}`
+                        );
+
+                        search();
+                      }}
+                      className="self-stretch flex items-start justify-start gap-[8px] text-2xs text-white font-inter leading-[24px] font-light bg-transparent h-[25px] w-[90px] p-0 m-0"
+                    >
                       {`From: `}
                       {transaction.block
                         ? formatKoinosAddress(searchInput)
@@ -82,24 +124,27 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                           formatKoinosAddress(
                             transaction.trx.transaction.header.payer
                           )}
-                    </p>
+                    </Button>
                   </div>
 
-                  <div className="h-[26px] flex text-center text-3xs text-o rounded bg-almost-black items-center justify-center py-[3px] px-2 border-[1px] border-solid border-o leading-[10px] font-medium">
+                  <div className="h-[26px] flex text-center text-3xs text-o rounded bg-almost-black items-center justify-center py-[3px] px-2 border-[1px] border-solid border-transparent leading-[10px] font-medium">
                     Tx{" "}
                     {transaction.block
                       ? transaction.block.receipt.id
                       : transaction.trx?.transaction.id}
                   </div>
 
-                  <div className="flex flex-col items-start justify-start text-right text-xl text-white w-[220px]">
+                  <div className="flex flex-col items-start justify-start text-right text-xl text-white w-[200px]">
                     <p className="relative leading-[24px] font-medium inline-block w-full">
                       {transaction.block
                         ? transaction.block.receipt.token_events
                         : transaction.trx?.receipt.token_events}
                     </p>
                     <p className="relative text-sm leading-[24px] font-light text-gray inline-block w-full">
-                      $99,999,999
+                      $
+                      {transaction.trx
+                        ? transaction.trx.receipt.amount
+                        : transaction.block?.receipt.amount}
                     </p>
                   </div>
                 </div>

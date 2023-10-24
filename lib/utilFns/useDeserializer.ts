@@ -1,23 +1,26 @@
 import { Provider, Serializer, utils } from "koilib";
 import { HistoryRecord } from "./useGetAcctHistory";
 import { getTokenInformation } from "./useTokens";
+import { fetchCoingeckoData } from "./useCoinGecko";
 
 const provider = new Provider(["https://api.koinos.io"]);
-// const provider = new Provider(["https://harbinger-api.koinos.io"]);
 
 export const deserializeEvents = async (
   account: string,
   historyRecords: HistoryRecord[]
 ): Promise<HistoryRecord[]> => {
   const serializer = new Serializer(utils.tokenAbi.koilib_types!);
+  const koinPrice: number = (await fetchCoingeckoData()).koinos.usd;
 
   // iterate over history records
   for (let index = 0; index < historyRecords.length; index++) {
     const historyRec = historyRecords[index];
+    historyRec.koinPrice = koinPrice;
 
     // if the history record is about a transaction
     if (historyRec.trx && historyRec.trx.receipt.events) {
       historyRec.trx.receipt.token_events = [];
+
       // iterate over the events available in the receipt
       for (
         let index = 0;
@@ -46,16 +49,24 @@ export const deserializeEvents = async (
                 tokenInfo.decimals
               );
 
+              if (tokenInfo.symbol === "KOIN") {
+                // historyRec.trx.receipt.koinPrice = koinPrice;
+
+                historyRec.trx.receipt.amount = String(
+                  (Number(amount) * koinPrice).toFixed(2)
+                );
+              }
+
               // check if it's token we sent
               if (transferData.from === account) {
                 historyRec.trx.receipt.token_events.push(
-                  `-${amount} ${tokenInfo.symbol} (sent)`
+                  `-${amount} ${tokenInfo.symbol}`
                 );
               }
               // otherwise, it's tokens we received
               else {
                 historyRec.trx.receipt.token_events.push(
-                  `+${amount} ${tokenInfo.symbol} (received)`
+                  `+${amount} ${tokenInfo.symbol}`
                 );
               }
             }
@@ -82,6 +93,14 @@ export const deserializeEvents = async (
                 transferData.value,
                 tokenInfo.decimals
               );
+
+              if (tokenInfo.symbol === "KOIN") {
+                // historyRec.trx.receipt.koinPrice = koinPrice;
+
+                historyRec.trx.receipt.amount = String(
+                  (Number(amount) * koinPrice).toFixed(2)
+                );
+              }
 
               historyRec.trx.receipt.token_events.push(
                 `+${amount} ${tokenInfo.symbol} (minted)`
@@ -110,6 +129,14 @@ export const deserializeEvents = async (
                 tokenInfo.decimals
               );
 
+              if (tokenInfo.symbol === "KOIN") {
+                // historyRec.trx.receipt.koinPrice = koinPrice;
+
+                historyRec.trx.receipt.amount = String(
+                  (Number(amount) * koinPrice).toFixed(2)
+                );
+              }
+
               historyRec.trx.receipt.token_events.push(
                 `-${amount} ${tokenInfo.symbol} (burned)`
               );
@@ -119,7 +146,9 @@ export const deserializeEvents = async (
           }
         }
       }
-    } // if the history record is about a block
+    }
+
+    // if the history record is about a block
     else if (historyRec.block && historyRec.block.receipt.events) {
       historyRec.block.receipt.token_events = [];
       // iterate over the events available in the receipt
@@ -150,16 +179,24 @@ export const deserializeEvents = async (
                 tokenInfo.decimals
               );
 
+              if (tokenInfo.symbol === "KOIN") {
+                // historyRec.block.receipt.koinPrice = koinPrice;
+
+                historyRec.block.receipt.amount = String(
+                  (Number(amount) * koinPrice).toFixed(2)
+                );
+              }
+
               // check if it's token we sent
               if (transferData.from === account) {
                 historyRec.block.receipt.token_events.push(
-                  `-${amount} ${tokenInfo.symbol} (sent)`
+                  `-${amount} ${tokenInfo.symbol}`
                 );
               }
               // otherwise, it's tokens we received
               else {
                 historyRec.block.receipt.token_events.push(
-                  `+${amount} ${tokenInfo.symbol} (received)`
+                  `+${amount} ${tokenInfo.symbol}`
                 );
               }
             }
@@ -186,6 +223,14 @@ export const deserializeEvents = async (
                 transferData.value,
                 tokenInfo.decimals
               );
+
+              if (tokenInfo.symbol === "KOIN") {
+                // historyRec.block.receipt.koinPrice = koinPrice;
+
+                historyRec.block.receipt.amount = String(
+                  (Number(amount) * koinPrice).toFixed(2)
+                );
+              }
 
               historyRec.block.receipt.token_events.push(
                 `+${amount} ${tokenInfo.symbol} (minted)`
@@ -214,6 +259,14 @@ export const deserializeEvents = async (
                 transferData.value,
                 tokenInfo.decimals
               );
+
+              if (tokenInfo.symbol === "KOIN") {
+                // historyRec.block.receipt.koinPrice = koinPrice;
+
+                historyRec.block.receipt.amount = String(
+                  (Number(amount) * koinPrice).toFixed(2)
+                );
+              }
 
               historyRec.block.receipt.token_events.push(
                 `-${amount} ${tokenInfo.symbol} (burned)`

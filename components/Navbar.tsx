@@ -81,8 +81,8 @@ const Navbar: FC<NavbarProps> = ({}) => {
           <div className="flex items-center justify-center">
             <Button
               onClick={onOpen}
-              variant="bordered"
-              className="flex items-center px-2 justify-between border-o"
+              // variant="bordered"
+              className="flex items-center px-2 justify-between border-o bg-transparent"
               startContent={
                 <SearchIcon className="text-white/90  pointer-events-none flex-shrink-0 w-5 h-5" />
               }
@@ -97,7 +97,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
               onOpenChange={onOpenChange}
               size="2xl"
             >
-              <ModalContent className="flex items-center justify-center h-[30%] bg-almost-black border-1 border-o overflow-hidden">
+              <ModalContent className="flex items-center justify-center h-[30%] bg-almost-black  border-o overflow-hidden">
                 {() => (
                   <>
                     <ModalHeader />

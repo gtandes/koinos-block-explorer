@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { getNetworkHeight, getBurned } from "@/lib/utilFns/useNetwork";
-// import { useQuery } from "@tanstack/react-query";
-import { mexcKoinLastPrice } from "@/lib/utilFns/useMEXC";
+import { koinLastPrice } from "@/lib/utilFns/useMEXC";
 import { Contract, Provider, utils } from "koilib";
 import { formatNumberWithCommas } from "@/lib/utilFns/useFormatInput";
 
@@ -22,7 +21,7 @@ const NetworkData: FC<NetworkDataProps> = async ({}) => {
   const { result: totalKoin } = await koin.balanceOf();
   const totalKoinValue = totalKoin?.value ? parseFloat(totalKoin.value) : 0;
 
-  const marketcap = (mexcKoinLastPrice * totalKoinValue) / 100;
+  const marketcap = (koinLastPrice * totalKoinValue) / 100;
 
   return (
     <div className="leading-[24px] text-left inline-block w-[100px] h-[89px]">

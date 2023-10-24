@@ -33,8 +33,6 @@ const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
   } = transactionStore();
 
   const search = async () => {
-    // e.preventDefault();
-
     let acctHistSearchRes = await getAccountHistory(searchInput, 21);
     acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
     acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
