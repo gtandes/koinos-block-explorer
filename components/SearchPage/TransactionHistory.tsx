@@ -1,8 +1,8 @@
 "use client";
 
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { DownloadIcon, UploadIcon } from "lucide-react";
-import { Button, ScrollShadow } from "@nextui-org/react";
+import { Button, Progress, ScrollShadow } from "@nextui-org/react";
 import { useInView } from "react-intersection-observer";
 
 import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
@@ -34,8 +34,10 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
     setManaPercentBalance,
   } = transactionStore();
 
+  console.log(accountTransactionHistory);
+
   const search = async () => {
-    let acctHistSearchRes = await getAccountHistory(searchInput, 21);
+    let acctHistSearchRes = await getAccountHistory(searchInput, 20);
     acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
     acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
 
@@ -74,9 +76,6 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
     },
   });
 
-  console.log(data?.pages[0]);
-  console.log(fetchNextPage, isFetchingNextPage, hasNextPage);
-
   // useEffect(() => {
   //   if (inView && hasNextPage) {
   //     console.log("Fire!");
@@ -84,8 +83,51 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
   //   }
   // }, [inView, hasNextPage, fetchNextPage]);
 
+  const [value, setValue] = useState(0);
+  const duration = 5000;
+  const updateInterval = 100;
+
+  useEffect(() => {
+    const iterations = duration / updateInterval;
+    let currentIteration = 0;
+
+    const interval = setInterval(() => {
+      setValue((v) => {
+        if (currentIteration >= iterations) {
+          clearInterval(interval); // Stop the interval after 5 seconds
+          return 100; // Ensure the progress reaches 100%
+        }
+        currentIteration++;
+        return v + 10;
+      });
+    }, updateInterval);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setValue((v) => (v >= 100 ? 0 : v + 10));
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
+      {accountTransactionHistory.length <= 20 && (
+        <div className="max-w-md mt-20">
+          Retrieving transaction history...
+          <Progress
+            aria-label="Retrieving Transactions..."
+            size="md"
+            value={value}
+            color="success"
+            className="max-w-md"
+          />
+        </div>
+      )}
+
       <div className="h-[50vh] overflow-y-auto flex flex-col items-center justify-center box-border gap-[8px] text-left text-sm text-success-400 font-inter">
         {/* {accountTransactionHistory && accountTransactionHistory.length > 0 && ( */}
         <ScrollShadow className="w-full h-full">

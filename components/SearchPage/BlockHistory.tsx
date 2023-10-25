@@ -1,8 +1,8 @@
 "use client";
 
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { DownloadIcon, UploadIcon } from "lucide-react";
-import { Button, ScrollShadow } from "@nextui-org/react";
+import { Button, Progress, ScrollShadow } from "@nextui-org/react";
 import { useInView } from "react-intersection-observer";
 
 import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
@@ -35,7 +35,7 @@ const BlockHistory: FC<BlockHistoryProps> = ({}) => {
   } = transactionStore();
 
   const search = async () => {
-    let acctHistSearchRes = await getAccountHistory(searchInput, 21);
+    let acctHistSearchRes = await getAccountHistory(searchInput, 20);
     acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
     acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
 
@@ -81,8 +81,43 @@ const BlockHistory: FC<BlockHistoryProps> = ({}) => {
   //   }
   // }, [inView, hasNextPage, fetchNextPage]);
 
+  const [value, setValue] = useState(0);
+  const duration = 5000;
+  const updateInterval = 100;
+
+  useEffect(() => {
+    const iterations = duration / updateInterval;
+    let currentIteration = 0;
+
+    const interval = setInterval(() => {
+      setValue((v) => {
+        if (currentIteration >= iterations) {
+          clearInterval(interval); // Stop the interval after 5 seconds
+          return 100; // Ensure the progress reaches 100%
+        }
+        currentIteration++;
+        return v + 10;
+      });
+    }, updateInterval);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
+      {accountTransactionHistory.length <= 20 && (
+        <div className="max-w-md mt-20">
+          Retrieving mint/burn history...
+          <Progress
+            aria-label="Retrieving Transactions..."
+            size="md"
+            value={value}
+            color="success"
+            className="max-w-md"
+          />
+        </div>
+      )}
+
       <div className="h-[50vh] overflow-y-auto flex flex-col items-start justify-start box-border gap-[8px] text-left text-sm text-success-400 font-inter">
         <ScrollShadow className="w-full h-full">
           {accountTransactionHistory
