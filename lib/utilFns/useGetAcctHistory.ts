@@ -18,7 +18,6 @@ export type BlockReceiptJson = {
   network_bandwidth_charged?: string;
   compute_bandwidth_charged?: string;
   amount?: string;
-  // koinPrice?: number;
 };
 
 export type TransactionReceiptJson = {
@@ -36,7 +35,6 @@ export type TransactionReceiptJson = {
   token_events: string[];
   logs: string[];
   amount?: string;
-  // koinPrice?: number;
 };
 
 export type HistoryRecord = {

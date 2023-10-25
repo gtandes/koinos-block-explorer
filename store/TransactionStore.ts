@@ -12,12 +12,13 @@ export const transactionStore = create(
       wEthBalance: "",
       manaPercentBalance: "",
       deserializedAmount: "",
+      isSwitchSelected: false,
     },
     (set, get) => ({
-      // toggleSecondColumn: () =>
-      //   set(() => ({
-      //     isFirstColClicked: !get().isFirstColClicked,
-      //   })),
+      switchHistoryRecord: () =>
+        set(() => ({
+          isSwitchSelected: !get().isSwitchSelected,
+        })),
 
       setAddressSearch: (input: string) => set({ searchInput: input }),
 

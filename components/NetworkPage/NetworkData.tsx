@@ -1,5 +1,9 @@
 import { FC } from "react";
-import { getNetworkHeight, getBurned } from "@/lib/utilFns/useNetwork";
+import {
+  getNetworkHeight,
+  getBurned,
+  consultGeneralInfo,
+} from "@/lib/utilFns/useNetwork";
 import { koinLastPrice } from "@/lib/utilFns/useMEXC";
 import { Contract, Provider, utils } from "koilib";
 import { formatNumberWithCommas } from "@/lib/utilFns/useFormatInput";
@@ -10,6 +14,7 @@ const NetworkData: FC<NetworkDataProps> = async ({}) => {
   const provider = new Provider(["https://api.koinos.io"]);
   const burnedAmount = await getBurned();
   const networkHeight = await getNetworkHeight();
+  const { koinClaimed } = await consultGeneralInfo();
 
   const koinContract = new Contract({
     id: "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
@@ -26,7 +31,7 @@ const NetworkData: FC<NetworkDataProps> = async ({}) => {
   return (
     <div className="leading-[24px] text-left inline-block w-[100px] h-[89px]">
       <p className="m-0">{networkHeight}</p>
-      <p className="m-0">Pending BE</p>
+      <p className="m-0">{koinClaimed}</p>
       <p className="m-0 w-[100px]">
         ${formatNumberWithCommas(marketcap.toFixed(0))}
       </p>

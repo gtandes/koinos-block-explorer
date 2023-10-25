@@ -77,6 +77,8 @@ const Navbar: FC<NavbarProps> = ({}) => {
       </Link>
 
       <nav className="items-center justify-end gap-[32px] hidden sm:flex">
+        <ActiveLink href="/network">Network</ActiveLink>
+
         {!homeRoute && (
           <div className="flex items-center justify-center">
             <Button
@@ -110,12 +112,9 @@ const Navbar: FC<NavbarProps> = ({}) => {
           </div>
         )}
 
-        {/* {!homeRoute && <ActiveLink href="/search">Search</ActiveLink>} */}
-        <ActiveLink href="/network">Network</ActiveLink>
-
-        <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">
+        {/* <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">
           <Link href="/dump">Dump</Link>
-        </Button>
+        </Button> */}
       </nav>
     </section>
   );
