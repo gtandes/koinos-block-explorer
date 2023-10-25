@@ -111,11 +111,14 @@ export const getManaPercent = async (acctId: string) => {
 
   const manaAvailable = await provider.getAccountRc(acctId);
 
-  const manaPercent = (
+  let manaPercent = (
     Number(manaAvailable) /
     Number(koinInWallet) /
     1000000
   ).toFixed(2);
+
+  // Limit manaPercent to a maximum of 100.00%
+  manaPercent = Math.min(100, parseFloat(manaPercent)).toFixed(2);
 
   return manaPercent;
 };

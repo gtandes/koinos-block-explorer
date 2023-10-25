@@ -1,7 +1,6 @@
 "use client";
 
 import { Switch } from "@nextui-org/react";
-// import { Switch } from "@/components/ui/switch";
 
 import AcctOwnerInfo from "@/components/SearchPage/AcctOwnerInfo";
 import TokenCountCard from "@/components/SearchPage/TokenCountCard";
@@ -9,6 +8,8 @@ import TotalBalanceCard from "@/components/SearchPage/TotalBalanceCard";
 import TransactionHistory from "@/components/SearchPage/TransactionHistory";
 import { transactionStore } from "@/store/TransactionStore";
 import BlockHistory from "@/components/SearchPage/BlockHistory";
+import { BlocksIcon, CandlestickChartIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function page() {
   const { switchHistoryRecord, isSwitchSelected } = transactionStore();
@@ -22,9 +23,11 @@ export default function page() {
           {isSwitchSelected ? "Block Data" : "Transaction Data"}
 
           <Switch
-            color="default"
+            color="success"
             isSelected={isSwitchSelected}
             onValueChange={switchHistoryRecord}
+            startContent={<BlocksIcon />}
+            endContent={<CandlestickChartIcon />}
           />
         </div>
       </div>
