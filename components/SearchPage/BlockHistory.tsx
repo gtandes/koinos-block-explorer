@@ -27,35 +27,8 @@ const BlockHistory: FC<BlockHistoryProps> = ({}) => {
   const {
     accountTransactionHistory,
     searchInput,
-    // setAddressSearch,
-    setKoinBalance,
-    setVHPBalance,
     setAccountTransactionHistory,
-    setManaPercentBalance,
   } = transactionStore();
-
-  const search = async () => {
-    let acctHistSearchRes = await getAccountHistory(searchInput, 20);
-    acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
-    acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
-
-    const koinInWallet = await getAcctTokenBalance(
-      "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
-      searchInput
-    );
-
-    const vhpInWallet = await getAcctTokenBalance(
-      "18tWNU7E4yuQzz7hMVpceb9ixmaWLVyQsr",
-      searchInput
-    );
-
-    const manaPerc = await getManaPercent(searchInput);
-
-    setKoinBalance(koinInWallet);
-    setVHPBalance(vhpInWallet);
-    setAccountTransactionHistory(acctHistSearchRes);
-    setManaPercentBalance(manaPerc);
-  };
 
   // const {
   //   data,
@@ -81,24 +54,12 @@ const BlockHistory: FC<BlockHistoryProps> = ({}) => {
   //   }
   // }, [inView, hasNextPage, fetchNextPage]);
 
+  // progress bar
   const [value, setValue] = useState(0);
-  const duration = 5000;
-  const updateInterval = 100;
-
   useEffect(() => {
-    const iterations = duration / updateInterval;
-    let currentIteration = 0;
-
     const interval = setInterval(() => {
-      setValue((v) => {
-        if (currentIteration >= iterations) {
-          clearInterval(interval); // Stop the interval after 5 seconds
-          return 100; // Ensure the progress reaches 100%
-        }
-        currentIteration++;
-        return v + 10;
-      });
-    }, updateInterval);
+      setValue((v) => (v >= 100 ? 0 : v + 10));
+    }, 500);
 
     return () => clearInterval(interval);
   }, []);

@@ -2,22 +2,32 @@
 
 import { transactionStore } from "@/store/TransactionStore";
 import { FC } from "react";
-import { HistoryRecord } from "@/lib/utilFns/useGetAcctHistory";
+import {
+  HistoryRecord,
+  getAcctTokenBalance,
+  getManaPercent,
+} from "@/lib/utilFns/useGetAcctHistory";
+import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "@nextui-org/react";
 
 type TotalBalanceCardProps = { className?: string };
 
 const TotalBalanceCard: FC<TotalBalanceCardProps> = ({ className }) => {
-  const { manaPercentBalance, koinBalance, accountTransactionHistory } =
-    transactionStore();
+  const { accountTransactionHistory, searchInput } = transactionStore();
 
-  // const koinPrice = accountTransactionHistory.map(
-  //   (transaction: HistoryRecord, index) => {
-  //     if (index === 0) {
-  //       return transaction.koinPrice;
-  //     }
-  //     return null; // Return null for other iterations
-  //   }
-  // );
+  const { data, error, isFetching, isLoading } = useQuery({
+    queryKey: ["tokenBalances"],
+    queryFn: async () => {
+      const koinInWallet = await getAcctTokenBalance(
+        "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
+        searchInput
+      );
+
+      const manaPercentBalance = await getManaPercent(searchInput);
+
+      return { koinInWallet, manaPercentBalance };
+    },
+  });
 
   const lastKoinPrice = accountTransactionHistory
     .map((transaction: HistoryRecord) => {
@@ -34,14 +44,30 @@ const TotalBalanceCard: FC<TotalBalanceCardProps> = ({ className }) => {
           Koin Balance
         </p>
 
-        <p className="relative leading-[24px] font-light text-gray text-right">
-          {manaPercentBalance}% Mana
-        </p>
+        {isFetching ? (
+          <Spinner color="success" size="md" />
+        ) : (
+          data && (
+            <p className="relative leading-[24px] font-light text-gray text-right">
+              {data?.manaPercentBalance}% Mana
+            </p>
+          )
+        )}
       </div>
 
-      <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
-        $ {(Number(koinBalance) * Number(lastKoinPrice)).toFixed(2)}
-      </p>
+      {isFetching ? (
+        <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
+          <Spinner color="success" size="lg" />
+        </p>
+      ) : (
+        data && (
+          <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
+            ${" "}
+            {lastKoinPrice !== undefined &&
+              (Number(data?.koinInWallet) * lastKoinPrice).toFixed(2)}
+          </p>
+        )
+      )}
     </div>
   );
 };

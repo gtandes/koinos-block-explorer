@@ -1,12 +1,33 @@
 "use client";
 
+import { getAcctTokenBalance } from "@/lib/utilFns/useGetAcctHistory";
 import { transactionStore } from "@/store/TransactionStore";
+import { Skeleton, Spinner } from "@nextui-org/react";
+import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 
 type TokenCountCardProps = { className?: string };
 
 const TokenCountCard: FC<TokenCountCardProps> = ({ className }) => {
-  const { koinBalance, vhpBalance } = transactionStore();
+  const { searchInput } = transactionStore();
+
+  const { data, error, isFetching, isLoading } = useQuery({
+    queryKey: ["tokenBalances"],
+    queryFn: async () => {
+      const koinInWallet = await getAcctTokenBalance(
+        "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
+        searchInput
+      );
+
+      const vhpInWallet = await getAcctTokenBalance(
+        "18tWNU7E4yuQzz7hMVpceb9ixmaWLVyQsr",
+        searchInput
+      );
+
+      // console.log(koinInWallet, vhpInWallet);
+      return { koinInWallet, vhpInWallet };
+    },
+  });
 
   return (
     <div
@@ -28,25 +49,29 @@ const TokenCountCard: FC<TokenCountCardProps> = ({ className }) => {
       <div className="self-stretch h-[90px] overflow-y-auto shrink-0 flex flex-col items-start justify-start gap-[4px] text-2xs">
         <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
           <div className="relative leading-[24px] font-light">Koinos</div>
-          <div className="relative text-sm leading-[24px]">{koinBalance}</div>
+          {isFetching ? (
+            <Spinner color="success" size="sm" />
+          ) : (
+            data && (
+              <div className="relative text-sm leading-[24px]">
+                {data?.koinInWallet}
+              </div>
+            )
+          )}
         </div>
 
         <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
           <div className="relative leading-[24px] font-light">VHP</div>
-          <div className="relative text-sm leading-[24px]">{vhpBalance}</div>
+          {isFetching ? (
+            <Spinner color="success" size="sm" />
+          ) : (
+            data && (
+              <div className="relative text-sm leading-[24px]">
+                {data?.vhpInWallet}
+              </div>
+            )
+          )}
         </div>
-        {/* <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
-          <div className="relative leading-[24px] font-light">wETH</div>
-          <div className="relative text-sm leading-[24px]">99,999,999</div>
-        </div>
-        <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
-          <div className="relative leading-[24px] font-light">Koinos</div>
-          <div className="relative text-sm leading-[24px]">99,999,999</div>
-        </div>
-        <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
-          <div className="relative leading-[24px] font-light">Koinos</div>
-          <div className="relative text-sm leading-[24px]">99,999,999</div>
-        </div> */}
       </div>
     </div>
   );

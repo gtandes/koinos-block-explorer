@@ -10,71 +10,56 @@ import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
 import {
   HistoryRecord,
   getAccountHistory,
-  getAcctTokenBalance,
-  getManaPercent,
 } from "@/lib/utilFns/useGetAcctHistory";
 
 import { transactionStore } from "@/store/TransactionStore";
 import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 
 type TransactionHistoryProps = {};
 
 const TransactionHistory: FC<TransactionHistoryProps> = () => {
   const { ref, inView } = useInView();
 
-  const {
-    accountTransactionHistory,
-    searchInput,
-    setAddressSearch,
-    setKoinBalance,
-    setVHPBalance,
-    setAccountTransactionHistory,
-    setManaPercentBalance,
-  } = transactionStore();
+  const { accountTransactionHistory, searchInput, setAddressSearch } =
+    transactionStore();
 
-  console.log(accountTransactionHistory);
-
-  const search = async () => {
-    let acctHistSearchRes = await getAccountHistory(searchInput, 20);
-    acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
-    acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
-
-    const koinInWallet = await getAcctTokenBalance(
-      "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
-      searchInput
-    );
-
-    const vhpInWallet = await getAcctTokenBalance(
-      "18tWNU7E4yuQzz7hMVpceb9ixmaWLVyQsr",
-      searchInput
-    );
-
-    const manaPerc = await getManaPercent(searchInput);
-
-    setKoinBalance(koinInWallet);
-    setVHPBalance(vhpInWallet);
-    setAccountTransactionHistory(acctHistSearchRes);
-    setManaPercentBalance(manaPerc);
-  };
+  // console.log(accountTransactionHistory);
 
   const {
     data,
-    status,
     error,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery({
+    isFetching,
+    isLoading,
+  } = useSuspenseInfiniteQuery({
     queryKey: ["trxRecords"],
-    queryFn: () => accountTransactionHistory,
+    queryFn: async () => {
+      let acctHistSearchRes = await getAccountHistory(searchInput, 20);
+
+      acctHistSearchRes = await deserializeEvents(
+        searchInput,
+        acctHistSearchRes
+      );
+
+      acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
+      return acctHistSearchRes;
+    },
+
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = lastPage.length ? allPages.length + 1 : undefined;
       return nextPage;
     },
   });
+
+  console.log(data);
 
   // useEffect(() => {
   //   if (inView && hasNextPage) {
@@ -83,28 +68,8 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
   //   }
   // }, [inView, hasNextPage, fetchNextPage]);
 
+  // progress bar
   const [value, setValue] = useState(0);
-  const duration = 5000;
-  const updateInterval = 100;
-
-  useEffect(() => {
-    const iterations = duration / updateInterval;
-    let currentIteration = 0;
-
-    const interval = setInterval(() => {
-      setValue((v) => {
-        if (currentIteration >= iterations) {
-          clearInterval(interval); // Stop the interval after 5 seconds
-          return 100; // Ensure the progress reaches 100%
-        }
-        currentIteration++;
-        return v + 10;
-      });
-    }, updateInterval);
-
-    return () => clearInterval(interval);
-  }, []);
-
   useEffect(() => {
     const interval = setInterval(() => {
       setValue((v) => (v >= 100 ? 0 : v + 10));
@@ -132,7 +97,7 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
         {/* {accountTransactionHistory && accountTransactionHistory.length > 0 && ( */}
         <ScrollShadow className="w-full h-full">
           {accountTransactionHistory
-            ?.filter((item: HistoryRecord) => item.trx)
+            .filter((item: HistoryRecord) => item.trx)
             .map((transaction: HistoryRecord, index) => {
               return (
                 <div
@@ -170,7 +135,7 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
                               `${transaction.trx?.transaction.header?.payer}`
                             );
 
-                            search();
+                            // search();
                           }}
                           className="self-stretch flex items-start justify-start gap-[8px] text-2xs text-white font-inter leading-[24px] font-light bg-transparent h-[25px] w-[90px] p-0 m-0"
                         >
