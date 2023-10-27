@@ -15,7 +15,7 @@ import {
 import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
-import { useQuery, useSuspenseInfiniteQuery } from "@tanstack/react-query";
+// import { useQuery, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 
 type SearchComponentProps = { onClose?: () => void };
 

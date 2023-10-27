@@ -49,7 +49,7 @@ const TotalBalanceCard: FC<TotalBalanceCardProps> = ({ className }) => {
         ) : (
           data && (
             <p className="relative leading-[24px] font-light text-gray text-right">
-              {data?.manaPercentBalance}% Mana
+              {data.manaPercentBalance}% Mana
             </p>
           )
         )}
@@ -64,7 +64,7 @@ const TotalBalanceCard: FC<TotalBalanceCardProps> = ({ className }) => {
           <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
             ${" "}
             {lastKoinPrice !== undefined &&
-              (Number(data?.koinInWallet) * lastKoinPrice).toFixed(2)}
+              (Number(data.koinInWallet) * lastKoinPrice).toFixed(2)}
           </p>
         )
       )}

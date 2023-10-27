@@ -17,6 +17,7 @@ import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
 import {
   useInfiniteQuery,
+  useQuery,
   useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 
@@ -33,12 +34,12 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
   const {
     data,
     error,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
+    // fetchNextPage,
+    // isFetchingNextPage,
+    // hasNextPage,
     isFetching,
     isLoading,
-  } = useSuspenseInfiniteQuery({
+  } = useQuery({
     queryKey: ["trxRecords"],
     queryFn: async () => {
       let acctHistSearchRes = await getAccountHistory(searchInput, 20);
@@ -52,14 +53,14 @@ const TransactionHistory: FC<TransactionHistoryProps> = () => {
       return acctHistSearchRes;
     },
 
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      const nextPage = lastPage.length ? allPages.length + 1 : undefined;
-      return nextPage;
-    },
+    // initialPageParam: 1,
+    // getNextPageParam: (lastPage, allPages) => {
+    //   const nextPage = lastPage.length ? allPages.length + 1 : undefined;
+    //   return nextPage;
+    // },
   });
 
-  console.log(data);
+  // console.log(data);
 
   // useEffect(() => {
   //   if (inView && hasNextPage) {

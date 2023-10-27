@@ -2,7 +2,6 @@ import { Provider, interfaces } from "koilib";
 import { HistoryRecord } from "./useGetAcctHistory";
 
 const provider = new Provider(["https://api.koinos.io"]);
-// const provider = new Provider(["https://harbinger-api.koinos.io"]);
 
 const cache = new Map<string, { expiration: number; timestamp: string }>();
 

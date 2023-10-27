@@ -17,7 +17,7 @@ import {
 import { transactionStore } from "@/store/TransactionStore";
 import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
-import { useInfiniteQuery } from "@tanstack/react-query";
+// import { useInfiniteQuery } from "@tanstack/react-query";
 
 type BlockHistoryProps = {};
 

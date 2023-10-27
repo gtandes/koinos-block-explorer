@@ -54,7 +54,7 @@ const TokenCountCard: FC<TokenCountCardProps> = ({ className }) => {
           ) : (
             data && (
               <div className="relative text-sm leading-[24px]">
-                {data?.koinInWallet}
+                {data.koinInWallet}
               </div>
             )
           )}
