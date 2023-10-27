@@ -9,7 +9,7 @@ const AcctOwnerInfo: FC<AcctOwnerInfoProps> = ({}) => {
   const { searchInput } = transactionStore();
 
   return (
-    <div className="flex items-start justify-start gap-[16px] text-center text-5xl text-o font-inter my-6">
+    <div className="flex flex-col sm:flex-row items-start justify-center sm:items-start sm:justify-start gap-[16px] text-center text-5xl text-o font-inter my-6">
       <div className="leading-[24px]">{searchInput}</div>
 
       <div className="rounded bg-almost-gray flex flex-row items-center justify-center py-px px-2 text-left text-xs border-[1px] border-solid border-transparent">

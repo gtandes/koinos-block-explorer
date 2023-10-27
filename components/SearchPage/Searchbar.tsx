@@ -6,16 +6,11 @@ import { Button } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 
 import { Input } from "../ui/input";
-import {
-  getAccountHistory,
-  getAcctTokenBalance,
-  getManaPercent,
-} from "@/lib/utilFns/useGetAcctHistory";
+import { getAccountHistory } from "@/lib/utilFns/useGetAcctHistory";
 
 import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
-// import { useQuery, useSuspenseInfiniteQuery } from "@tanstack/react-query";
 
 type SearchComponentProps = { onClose?: () => void };
 
@@ -24,14 +19,8 @@ const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
   const homeRoute = pathname === "/";
   const searchRoute = pathname === "/search";
 
-  const {
-    searchInput,
-    setAddressSearch,
-    // setKoinBalance,
-    // setVHPBalance,
-    setAccountTransactionHistory,
-    // setManaPercentBalance,
-  } = transactionStore();
+  const { searchInput, setAddressSearch, setAccountTransactionHistory } =
+    transactionStore();
 
   const search = async () => {
     let acctHistSearchRes = await getAccountHistory(searchInput, 21);
@@ -50,7 +39,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
         value={searchInput}
         onChange={(e) => setAddressSearch(e.target.value)}
         placeholder="Ron.Koin"
-        className="rounded min-w-[15rem] w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-transparent text-o mb-8 text-2xl font-bold placeholder-center "
+        className="rounded min-w-[15rem] max-w-[80vw] md:w-[35%] overflow-hidden text-center py-8 border-b-[1px] border-solid border-gray leading-[24px] bg-transparent text-o mb-8 text-2xl font-bold placeholder-center "
         style={{ width: inputWidth }}
       />
     );

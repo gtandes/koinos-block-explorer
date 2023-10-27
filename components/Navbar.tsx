@@ -65,18 +65,26 @@ const Navbar: FC<NavbarProps> = ({}) => {
           <Image
             src={"/logo.svg"}
             alt="Odyssius Logo"
-            className="sm:block hidden"
+            className="sm:flex hidden"
             width={146.32}
             height={26}
           />
 
-          <div className="relative leading-[24px] text-xs text-gray">
+          <Image
+            src={"/o.svg"}
+            alt="O Logo"
+            className="flex sm:hidden"
+            width={50}
+            height={50}
+          />
+
+          <div className="relative leading-[24px] text-xs text-gray sm:flex hidden">
             A simplified block explorer for the Koinos blockchain
           </div>
         </div>
       </Link>
 
-      <nav className="items-center justify-end gap-[32px] hidden sm:flex">
+      <nav className="items-center justify-end gap-[32px] flex">
         <ActiveLink href="/network">Network</ActiveLink>
 
         {!homeRoute && (
@@ -90,7 +98,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
               }
               endContent={<Kbd keys={["ctrl"]}>Q</Kbd>}
             >
-              <p className="text-white">Quick Search</p>
+              <p className="text-white hidden sm:flex">Quick Search</p>
             </Button>
 
             <Modal

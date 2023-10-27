@@ -17,14 +17,6 @@ const layout: FC<layoutProps> = ({ children }) => {
       <div className="absolute z-[1] top-0 right-[45vw] w-[55vw] h-[55vw] bg-[#19F7C1]/80 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 overflow-hidden" />
 
       <div className="absolute z-[1] -bottom-[30vh] left-[50%] w-[50vw] h-[50vw] bg-[#e5f523]/80 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000 overflow-hidden" />
-
-      {/* <section className="h-screen flex items-center justify-center">
-        <div className="container">
-          <div className="relative">
-            <img src="./src/strange-liquid.jpg" alt="Strange liquid" />
-          </div>
-        </div>
-      </section> */}
     </main>
   );
 };
