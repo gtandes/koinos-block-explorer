@@ -15,17 +15,28 @@ type TotalBalanceCardProps = { className?: string };
 const TotalBalanceCard: FC<TotalBalanceCardProps> = ({ className }) => {
   const { accountTransactionHistory, searchInput } = transactionStore();
 
-  const { data, error, isFetching, isLoading } = useQuery({
-    queryKey: ["tokenBalances"],
+  const {
+    data: koinData,
+    isFetching: isFetchingKoin,
+    isLoading: isLoadingKoin,
+  } = useQuery({
+    queryKey: ["koinBalance"],
     queryFn: async () => {
       const koinInWallet = await getAcctTokenBalance(
         "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
         searchInput
       );
 
+      return koinInWallet;
+    },
+  });
+
+  const { data: manaData, isFetching: isFetchingMana } = useQuery({
+    queryKey: ["tokenBalances"],
+    queryFn: async () => {
       const manaPercentBalance = await getManaPercent(searchInput);
 
-      return { koinInWallet, manaPercentBalance };
+      return manaPercentBalance;
     },
   });
 
@@ -44,29 +55,25 @@ const TotalBalanceCard: FC<TotalBalanceCardProps> = ({ className }) => {
           Koin Balance
         </p>
 
-        {isFetching ? (
+        {isFetchingMana ? (
           <Spinner color="success" size="md" />
         ) : (
-          data && (
-            <p className="relative leading-[24px] font-light text-gray text-right">
-              {data.manaPercentBalance}% Mana
-            </p>
-          )
+          <p className="relative leading-[24px] font-light text-gray text-right">
+            {manaData !== undefined && manaData}% Mana
+          </p>
         )}
       </div>
 
-      {isFetching ? (
+      {isFetchingKoin ? (
         <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
           <Spinner color="success" size="lg" />
         </p>
       ) : (
-        data && (
-          <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
-            ${" "}
-            {lastKoinPrice !== undefined &&
-              (Number(data.koinInWallet) * lastKoinPrice).toFixed(2)}
-          </p>
-        )
+        <p className="w-[300px] h-24 flex justify-center items-center text-21xl font-bold">
+          ${" "}
+          {lastKoinPrice !== undefined &&
+            (Number(koinData) * lastKoinPrice).toFixed(2)}
+        </p>
       )}
     </div>
   );

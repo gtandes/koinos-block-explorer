@@ -1,7 +1,8 @@
 "use client";
 
-import { transactionStore } from "@/store/TransactionStore";
 import { FC } from "react";
+import { formatKoinosAddress } from "@/lib/utilFns/useFormatInput";
+import { transactionStore } from "@/store/TransactionStore";
 
 type AcctOwnerInfoProps = {};
 
@@ -9,11 +10,12 @@ const AcctOwnerInfo: FC<AcctOwnerInfoProps> = ({}) => {
   const { searchInput } = transactionStore();
 
   return (
-    <div className="flex flex-col sm:flex-row items-start justify-center sm:items-start sm:justify-start gap-[16px] text-center text-5xl text-o font-inter my-6">
-      <div className="leading-[24px]">{searchInput}</div>
+    <div className="flex flex-col sm:flex-row items-center justify-center sm:items-start sm:justify-start gap-[16px] text-center text-5xl text-o font-inter my-10 sm:my-6">
+      <div className="hidden sm:flex sm:leading-[24px]">{searchInput}</div>
+      <div className="sm:hidden">{formatKoinosAddress(searchInput)}</div>
 
       <div className="rounded bg-almost-gray flex flex-row items-center justify-center py-px px-2 text-left text-xs border-[1px] border-solid border-transparent">
-        <div className="relative leading-[24px] font-medium">ron.koin</div>
+        <p className="relative leading-[24px] font-medium">ron.koin</p>
       </div>
     </div>
   );

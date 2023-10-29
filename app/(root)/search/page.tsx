@@ -9,17 +9,27 @@ import TransactionHistory from "@/components/SearchPage/TransactionHistory";
 import { transactionStore } from "@/store/TransactionStore";
 import BlockHistory from "@/components/SearchPage/BlockHistory";
 import { BlocksIcon, CandlestickChartIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+// import {
+//   HydrationBoundary,
+//   QueryClient,
+//   dehydrate,
+// } from "@tanstack/react-query";
 
 export default function page() {
   const { switchHistoryRecord, isSwitchSelected } = transactionStore();
 
+  // const queryClient = new QueryClient();
+  // await queryClient.prefetchQuery({
+  //   queryKey: ["trxRecords"],
+  //   queryFn: () => {},
+  // });
+
   return (
-    <section className="relative z-[5] flex flex-col items-center justify-start w-full h-[100vh] overflow-hidden backdrop-blur-sm">
-      <div className="flex justify-between items-center w-[1038px]">
+    <section className="relative z-[5] flex flex-col items-center justify-start w-full h-[100vh] overflow-y-auto overflow-x-hidden sm:overflow-hidden backdrop-blur-sm mt-2 sm:mt-0">
+      <div className="flex flex-col sm:flex-row justify-between items-center w-[1038px]">
         <AcctOwnerInfo />
 
-        <div className="flex items-center justify-end gap-[24px] ">
+        <div className="flex items-center justify-end gap-[24px] mb-4 sm:mb-0">
           {isSwitchSelected ? "Block Data" : "Transaction Data"}
 
           <Switch
@@ -32,7 +42,7 @@ export default function page() {
         </div>
       </div>
 
-      <div className="flex items-center justify-start gap-[24px] text-left text-base text-white font-inter mb-4">
+      <div className="flex flex-col sm:flex-row items-center justify-start gap-[24px] text-left text-base text-white font-inter mb-4">
         <TotalBalanceCard />
         <TokenCountCard />
       </div>

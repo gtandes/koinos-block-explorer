@@ -8,7 +8,7 @@ type layoutProps = {
 
 const layout: FC<layoutProps> = ({ children }) => {
   return (
-    <main className="min-h-screen overflow-hidden">
+    <main className="min-h-screen overflow-y-auto overflow-x-hidden sm:overflow-hidden h-[100vh]">
       <Navbar />
       <div className="h-20" />
       {children}

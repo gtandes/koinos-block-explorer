@@ -11,27 +11,41 @@ type TokenCountCardProps = { className?: string };
 const TokenCountCard: FC<TokenCountCardProps> = ({ className }) => {
   const { searchInput } = transactionStore();
 
-  const { data, error, isFetching, isLoading } = useQuery({
-    queryKey: ["tokenBalances"],
+  const {
+    data: koinData,
+    isFetching: isFetchingKoin,
+    isLoading: isKoinLoading,
+  } = useQuery({
+    queryKey: ["koinBalance"],
     queryFn: async () => {
       const koinInWallet = await getAcctTokenBalance(
         "15DJN4a8SgrbGhhGksSBASiSYjGnMU8dGL",
         searchInput
       );
 
+      return koinInWallet;
+    },
+  });
+
+  const {
+    data: vhpData,
+    isFetching: isFetchingvhp,
+    isLoading: isvhpLoading,
+  } = useQuery({
+    queryKey: ["vhpBalance"],
+    queryFn: async () => {
       const vhpInWallet = await getAcctTokenBalance(
         "18tWNU7E4yuQzz7hMVpceb9ixmaWLVyQsr",
         searchInput
       );
 
-      // console.log(koinInWallet, vhpInWallet);
-      return { koinInWallet, vhpInWallet };
+      return vhpInWallet;
     },
   });
 
   return (
     <div
-      className={`rounded-lg [background:linear-gradient(180deg,_rgba(0,_0,_0,_0.5),_rgba(0,_0,_0,_0.5))] box-border w-[684px] h-[20vh] flex flex-col items-start justify-start p-4 gap-[16px] text-left text-base text-white font-inter border-[0.1px] border-solid border-transparent ${className}`}
+      className={`rounded-lg [background:linear-gradient(180deg,_rgba(0,_0,_0,_0.5),_rgba(0,_0,_0,_0.5))] box-border w-[330px] sm:w-[684px] h-[20vh] flex flex-col items-start justify-start p-4 gap-[16px] text-left text-base text-white font-inter border-[0.1px] border-solid border-transparent ${className}`}
     >
       <div className="flex flex-row items-start justify-start gap-[2px]">
         <div className="flex flex-row items-start justify-start border-b-[2px] border-solid border-o-yellow">
@@ -49,26 +63,22 @@ const TokenCountCard: FC<TokenCountCardProps> = ({ className }) => {
       <div className="self-stretch h-[90px] overflow-y-auto shrink-0 flex flex-col items-start justify-start gap-[4px] text-2xs">
         <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
           <div className="relative leading-[24px] font-light">Koinos</div>
-          {isFetching ? (
+          {isFetchingKoin ? (
             <Spinner color="success" size="sm" />
           ) : (
-            data && (
-              <div className="relative text-sm leading-[24px]">
-                {data.koinInWallet}
-              </div>
+            koinData && (
+              <div className="relative text-sm leading-[24px]">{koinData}</div>
             )
           )}
         </div>
 
         <div className="self-stretch flex flex-row items-center justify-between border-b-[0.1px] border-solid border-gray mr-2">
           <div className="relative leading-[24px] font-light">VHP</div>
-          {isFetching ? (
+          {isFetchingvhp ? (
             <Spinner color="success" size="sm" />
           ) : (
-            data && (
-              <div className="relative text-sm leading-[24px]">
-                {data?.vhpInWallet}
-              </div>
+            vhpData && (
+              <div className="relative text-sm leading-[24px]">{vhpData}</div>
             )
           )}
         </div>

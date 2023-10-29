@@ -11,6 +11,7 @@ import { getAccountHistory } from "@/lib/utilFns/useGetAcctHistory";
 import { deserializeEvents } from "@/lib/utilFns/useDeserializer";
 import { transactionStore } from "@/store/TransactionStore";
 import { getTransactionsTimestamps } from "@/lib/utilFns/useTransactions";
+import { useSearchTrxRecords } from "@/lib/react-query/queries";
 
 type SearchComponentProps = { onClose?: () => void };
 
@@ -19,16 +20,15 @@ const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
   const homeRoute = pathname === "/";
   const searchRoute = pathname === "/search";
 
-  const { searchInput, setAddressSearch, setAccountTransactionHistory } =
-    transactionStore();
+  const { searchInput, setAddressSearch } = transactionStore();
 
-  const search = async () => {
-    let acctHistSearchRes = await getAccountHistory(searchInput, 21);
-    acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
-    acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
+  // const search = async () => {
+  //   let acctHistSearchRes = await getAccountHistory(searchInput, 21);
+  //   acctHistSearchRes = await deserializeEvents(searchInput, acctHistSearchRes);
+  //   acctHistSearchRes = await getTransactionsTimestamps(acctHistSearchRes);
+  // };
 
-    setAccountTransactionHistory(acctHistSearchRes);
-  };
+  const { data, refetch } = useSearchTrxRecords();
 
   const DynamicWidthInput = () => {
     const inputWidth = `${searchInput.length}ch`;
@@ -51,7 +51,7 @@ const SearchComponent: FC<SearchComponentProps> = ({ onClose }) => {
 
       <Button
         onClick={() => {
-          search();
+          // search();
           !homeRoute && onClose?.();
         }}
         className="rounded bg-o flex flex-col items-center justify-center px-8 py-7 text-center text-2xl text-almost-black font-inter leading-[24px] font-medium"
