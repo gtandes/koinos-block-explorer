@@ -24,6 +24,7 @@ export const useSearchTrxRecords = () => {
     },
   });
 };
+
 export const useSearchBlockRecords = () => {
   const { searchInput } = transactionStore();
 

@@ -10,7 +10,7 @@ const AcctOwnerInfo: FC<AcctOwnerInfoProps> = ({}) => {
   const { searchInput } = transactionStore();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center sm:items-start sm:justify-start gap-[16px] text-center text-5xl text-o font-inter my-10 sm:my-6">
+    <div className="flex flex-row items-center justify-between gap-[16px] text-center text-5xl text-o font-inter my-8 sm:my-6">
       <div className="hidden sm:flex sm:leading-[24px]">{searchInput}</div>
       <div className="sm:hidden">{formatKoinosAddress(searchInput)}</div>
 

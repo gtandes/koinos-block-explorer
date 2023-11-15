@@ -11,11 +11,7 @@ type TokenCountCardProps = { className?: string };
 const TokenCountCard: FC<TokenCountCardProps> = ({ className }) => {
   const { searchInput } = transactionStore();
 
-  const {
-    data: koinData,
-    isFetching: isFetchingKoin,
-    isLoading: isKoinLoading,
-  } = useQuery({
+  const { data: koinData, isFetching: isFetchingKoin } = useQuery({
     queryKey: ["koinBalance"],
     queryFn: async () => {
       const koinInWallet = await getAcctTokenBalance(

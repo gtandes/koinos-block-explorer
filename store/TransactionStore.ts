@@ -4,8 +4,8 @@ import { combine } from "zustand/middleware";
 export const transactionStore = create(
   combine(
     {
-      accountTransactionHistory: [],
       searchInput: "",
+      koinBalance: "",
       isSwitchSelected: false,
     },
     (set, get) => ({
@@ -14,10 +14,8 @@ export const transactionStore = create(
           isSwitchSelected: !get().isSwitchSelected,
         })),
 
+      setKoinBalance: (newBalance: any) => set({ koinBalance: newBalance }),
       setAddressSearch: (input: string) => set({ searchInput: input }),
-
-      setAccountTransactionHistory: (newHistory: any) =>
-        set({ accountTransactionHistory: newHistory }),
     })
   )
 );
