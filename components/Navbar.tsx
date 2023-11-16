@@ -16,6 +16,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import SearchComponent from "./SearchPage/Searchbar";
+import WalletConnectBtn from "./WalletConnectBtn";
 
 type ActiveLinkProps = {
   href: string;
@@ -120,9 +121,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
           </div>
         )}
 
-        {/* <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">
-          <Link href="/dump">Dump</Link>
-        </Button> */}
+        <WalletConnectBtn />
       </nav>
     </section>
   );
