@@ -14,7 +14,7 @@ import { useSearchBlockRecords } from "@/lib/react-query/queries";
 type BlockHistoryProps = {};
 
 const BlockHistory: FC<BlockHistoryProps> = ({}) => {
-  const { accountTransactionHistory, searchInput } = transactionStore();
+  const { searchInput } = transactionStore();
 
   const { data, isFetched, isFetching, refetch } = useSearchBlockRecords();
 
@@ -46,7 +46,7 @@ const BlockHistory: FC<BlockHistoryProps> = ({}) => {
       {isFetched && !isFetching && (
         <div className="h-[50vh] overflow-y-auto overflow-x-hidden flex flex-col items-center justify-center box-border gap-[8px] text-left text-sm text-success-400 font-inter mb-4 sm:mb-0">
           <ScrollShadow className="w-full h-full">
-            {accountTransactionHistory
+            {data
               ?.filter((item: HistoryRecord) => item.block)
               .map((transaction: HistoryRecord, index) => {
                 return (

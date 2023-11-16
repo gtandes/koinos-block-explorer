@@ -191,34 +191,34 @@ export class WalletConnectKoinos {
   }
 }
 
-async function onConnect(): Promise<void> {
-  try {
-    connectButton.disabled = true;
-    accounts = await walletConnectKoinos.connect(
-      [ChainIds.Harbinger, ChainIds.Mainnet],
-      [Methods.SignMessage, Methods.SignTransaction]
-    );
-    console.info(accounts);
-    accountsInfo.value = JSON.stringify(accounts, null, 2);
-  } catch (err) {
-    console.error(err);
-    alert((err as Error).message);
-  } finally {
-    connectButton.disabled = false;
-  }
-}
+// async function onConnect(): Promise<void> {
+//   try {
+//     connectButton.disabled = true;
+//     accounts = await walletConnectKoinos.connect(
+//       [ChainIds.Harbinger, ChainIds.Mainnet],
+//       [Methods.SignMessage, Methods.SignTransaction]
+//     );
+//     console.info(accounts);
+//     accountsInfo.value = JSON.stringify(accounts, null, 2);
+//   } catch (err) {
+//     console.error(err);
+//     alert((err as Error).message);
+//   } finally {
+//     connectButton.disabled = false;
+//   }
+// }
 
-async function onDisconnect(): Promise<void> {
-  try {
-    disconnectButton.disabled = true;
-    await walletConnectKoinos.disconnect();
-  } catch (err) {
-    console.error(err);
-    alert((err as Error).message);
-  } finally {
-    disconnectButton.disabled = false;
-  }
-}
+// async function onDisconnect(): Promise<void> {
+//   try {
+//     disconnectButton.disabled = true;
+//     await walletConnectKoinos.disconnect();
+//   } catch (err) {
+//     console.error(err);
+//     alert((err as Error).message);
+//   } finally {
+//     disconnectButton.disabled = false;
+//   }
+// }
 
 function getNetworkSelection(): ChainIds {
   const networkSelection = (

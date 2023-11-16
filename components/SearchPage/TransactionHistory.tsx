@@ -15,7 +15,7 @@ import { useSearchTrxRecords } from "@/lib/react-query/queries";
 type TransactionHistoryProps = {};
 
 const TransactionHistory: FC<TransactionHistoryProps> = () => {
-  const { searchInput, setAddressSearch } = transactionStore();
+  const { setAddressSearch } = transactionStore();
 
   const { data, isFetched, isFetching, refetch } = useSearchTrxRecords();
 
