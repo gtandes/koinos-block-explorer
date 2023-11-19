@@ -1,7 +1,20 @@
-import NetworkData from "@/components/NetworkPage/NetworkData";
-import { NextPage } from "next";
+"use client";
 
-const page: NextPage = () => {
+import NetworkData from "@/components/NetworkPage/NetworkData";
+import { walletConnectStore } from "@/store/WalletConnectStore";
+import { NextPage } from "next";
+import { redirect } from "next/navigation";
+import { useLayoutEffect } from "react";
+
+const Page: NextPage = () => {
+  const { connectedAccount } = walletConnectStore();
+
+  useLayoutEffect(() => {
+    if (!connectedAccount) {
+      redirect("/");
+    }
+  }, [connectedAccount]);
+
   return (
     <section className="relative flex flex-col items-center justify-center z-[5] w-full h-[100vh] overflow-hidden">
       <div className="flex flex-col items-center justify-start text-right text-base text-o font-inter mt-[-20rem]">
@@ -22,4 +35,4 @@ const page: NextPage = () => {
   );
 };
 
-export default page;
+export default Page;

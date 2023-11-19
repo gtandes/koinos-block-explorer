@@ -2,7 +2,25 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install packages using:
+
+```bash
+npm i
+# or
+yarn
+```
+
+Second, create a .env or .env.local file, add the following variables, and give substitute the proper values:
+
+```bash
+NEXT_PUBLIC_WALLETCONNECT_ID=
+
+NEXT_PUBLIC_WHITELISTED_ACCOUNTS=address1,address2,address3
+```
+
+Get your NEXT_PUBLIC_WALLETCONNECT_ID by creating a free WalletConnect cloud project at https://cloud.walletconnect.com
+
+Third, run the development server:
 
 ```bash
 npm run dev

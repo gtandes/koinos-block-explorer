@@ -16,6 +16,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import SearchComponent from "./SearchPage/Searchbar";
+import WalletConnectBtn from "./WalletConnectBtn";
+import { walletConnectStore } from "@/store/WalletConnectStore";
 
 type ActiveLinkProps = {
   href: string;
@@ -40,9 +42,11 @@ const ActiveLink = ({ href, children }: ActiveLinkProps) => {
 type NavbarProps = {};
 
 const Navbar: FC<NavbarProps> = ({}) => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const pathname = usePathname();
   const homeRoute = pathname === "/";
+
+  const { connectedAccount } = walletConnectStore();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -85,7 +89,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
       </Link>
 
       <nav className="items-center justify-end gap-[32px] flex">
-        <ActiveLink href="/network">Network</ActiveLink>
+        {!!connectedAccount && <ActiveLink href="/network">Network</ActiveLink>}
 
         {!homeRoute && (
           <div className="flex items-center justify-center">
@@ -120,9 +124,7 @@ const Navbar: FC<NavbarProps> = ({}) => {
           </div>
         )}
 
-        {/* <Button className="rounded bg-o flex flex-row items-center justify-center py-2 px-4 text-steelblue leading-[24px]">
-          <Link href="/dump">Dump</Link>
-        </Button> */}
+        <WalletConnectBtn />
       </nav>
     </section>
   );

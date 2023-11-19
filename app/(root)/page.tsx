@@ -1,11 +1,14 @@
-import Background from "@/components/Background";
-import SearchComponent from "@/components/SearchPage/Searchbar";
-import Image from "next/image";
+"use client";
 
-export default function page() {
+import SearchComponent from "@/components/SearchPage/Searchbar";
+import { walletConnectStore } from "@/store/WalletConnectStore";
+
+export default function Page() {
+  const { connectedAccount } = walletConnectStore();
+
   return (
     <div className="relative z-[5] flex flex-col items-center justify-center w-full h-[100vh] overflow-hidden">
-      <SearchComponent />
+      {!!connectedAccount && <SearchComponent />}
     </div>
   );
 }

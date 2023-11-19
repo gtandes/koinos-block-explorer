@@ -9,20 +9,19 @@ import TransactionHistory from "@/components/SearchPage/TransactionHistory";
 import { transactionStore } from "@/store/TransactionStore";
 import BlockHistory from "@/components/SearchPage/BlockHistory";
 import { BlocksIcon, CandlestickChartIcon } from "lucide-react";
-// import {
-//   HydrationBoundary,
-//   QueryClient,
-//   dehydrate,
-// } from "@tanstack/react-query";
+import { walletConnectStore } from "@/store/WalletConnectStore";
+import { useLayoutEffect } from "react";
+import { redirect } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   const { switchHistoryRecord, isSwitchSelected } = transactionStore();
+  const { connectedAccount } = walletConnectStore();
 
-  // const queryClient = new QueryClient();
-  // await queryClient.prefetchQuery({
-  //   queryKey: ["trxRecords"],
-  //   queryFn: () => {},
-  // });
+  useLayoutEffect(() => {
+    if (!connectedAccount) {
+      redirect("/");
+    }
+  }, [connectedAccount]);
 
   return (
     <section className="relative z-[5] flex flex-col items-center justify-start w-full h-[100vh] overflow-y-auto overflow-x-hidden sm:overflow-hidden backdrop-blur-sm mt-2 sm:mt-0">
