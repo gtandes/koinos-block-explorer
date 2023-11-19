@@ -2,11 +2,10 @@
 
 import NetworkData from "@/components/NetworkPage/NetworkData";
 import { walletConnectStore } from "@/store/WalletConnectStore";
-import { NextPage } from "next";
 import { redirect } from "next/navigation";
 import { useLayoutEffect } from "react";
 
-const Page: NextPage = () => {
+export default function Page() {
   const { connectedAccount } = walletConnectStore();
 
   useLayoutEffect(() => {
@@ -33,6 +32,4 @@ const Page: NextPage = () => {
       </div>
     </section>
   );
-};
-
-export default Page;
+}
